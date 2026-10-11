@@ -1,0 +1,2258 @@
+<meta charset="utf-8">
+<title>Vaani — Technical Documentation &amp; Interview Guide</title>
+<style>
+  @page { size: A4; margin: 17mm 15mm 15mm; }
+
+  :root {
+    --ink: #16181d;
+    --ink-2: #3d424c;
+    --muted: #6a707c;
+    --faint: #949aa5;
+    --rule: #dfe2e8;
+    --rule-soft: #edeff3;
+    --accent: #3b34a8;
+    --accent-soft: #f0effb;
+    --ok: #0d6b47;
+    --ok-soft: #e6f4ee;
+    --warn: #8a5600;
+    --warn-soft: #fdf2df;
+    --danger: #a81f18;
+    --danger-soft: #fdecea;
+    --code-bg: #f5f6f9;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body {
+    margin: 0;
+    color: var(--ink);
+    background: #fff;
+    font: 10.2pt/1.55 "Segoe UI", -apple-system, system-ui, "Helvetica Neue", Arial, sans-serif;
+    hyphens: none;
+  }
+
+  /* ---------------------------------------------------------------- cover */
+  .cover {
+    height: 262mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    break-after: page;
+  }
+  .cover .eyebrow {
+    font-size: 9pt; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--accent); font-weight: 700; margin-bottom: 14mm;
+  }
+  .cover h1 {
+    font-size: 34pt; line-height: 1.06; letter-spacing: -.025em;
+    margin: 0 0 5mm; font-weight: 700;
+  }
+  .cover .tagline {
+    font-size: 13pt; color: var(--ink-2); line-height: 1.45;
+    max-width: 135mm; margin: 0 0 14mm; font-weight: 400;
+  }
+  .cover-rule { height: 3px; width: 46mm; background: var(--accent); margin-bottom: 12mm; }
+  .cover-facts {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 6mm; padding-top: 9mm; border-top: 1px solid var(--rule);
+  }
+  .cover-facts .n { font-size: 19pt; font-weight: 700; letter-spacing: -.02em; }
+  .cover-facts .l {
+    font-size: 7.6pt; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; margin-top: 1mm;
+  }
+  .cover-foot { margin-top: 14mm; font-size: 9pt; color: var(--faint); }
+
+  /* ------------------------------------------------------------- headings */
+  h2 {
+    break-before: page; break-after: avoid;
+    font-size: 17pt; letter-spacing: -.02em; margin: 0 0 1mm;
+    padding-bottom: 2.5mm; border-bottom: 2px solid var(--ink);
+  }
+  h2 .num { color: var(--accent); font-variant-numeric: tabular-nums; margin-right: 3mm; }
+  h2 + .lede { color: var(--muted); font-size: 10pt; margin: 3mm 0 6mm; max-width: 150mm; }
+
+  h3 {
+    break-after: avoid; font-size: 11.6pt; letter-spacing: -.01em;
+    margin: 7mm 0 2.5mm; color: var(--ink);
+  }
+  h4 {
+    break-after: avoid; font-size: 10pt; margin: 5mm 0 1.5mm;
+    color: var(--ink-2); font-weight: 700;
+  }
+  p { margin: 0 0 3mm; }
+  ul, ol { margin: 0 0 3.5mm; padding-left: 5.5mm; }
+  li { margin-bottom: 1.4mm; }
+  strong { font-weight: 650; }
+  a { color: var(--accent); text-decoration: none; }
+
+  /* ---------------------------------------------------------------- table */
+  table { width: 100%; border-collapse: collapse; margin: 3mm 0 5mm; font-size: 9.2pt; }
+  th {
+    text-align: left; font-size: 7.8pt; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; padding: 2mm 2.5mm;
+    border-bottom: 1.5px solid var(--rule); background: var(--rule-soft);
+  }
+  td { padding: 2.2mm 2.5mm; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  tr { break-inside: avoid; }
+  table.tight td, table.tight th { padding: 1.6mm 2.5mm; }
+
+  /* ----------------------------------------------------------------- code */
+  code {
+    font-family: "Cascadia Mono", Consolas, "SF Mono", Menlo, monospace;
+    font-size: .88em; background: var(--code-bg); padding: .5mm 1.2mm;
+    border-radius: 2px; color: #1f2430;
+  }
+  pre {
+    font-family: "Cascadia Mono", Consolas, "SF Mono", Menlo, monospace;
+    font-size: 8.1pt; line-height: 1.42; background: var(--code-bg);
+    border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+    border-radius: 3px; padding: 3mm 3.5mm; margin: 3mm 0 5mm;
+    white-space: pre; overflow: hidden; break-inside: avoid;
+  }
+  pre code { background: none; padding: 0; font-size: inherit; }
+
+  /* ---------------------------------------------------------------- boxes */
+  .callout {
+    border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+    background: var(--accent-soft); border-radius: 3px;
+    padding: 3mm 4mm; margin: 4mm 0; font-size: 9.4pt; break-inside: avoid;
+  }
+  .callout.ok { border-left-color: var(--ok); background: var(--ok-soft); }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+  .callout.danger { border-left-color: var(--danger); background: var(--danger-soft); }
+  .callout .t {
+    font-weight: 700; font-size: 8pt; letter-spacing: .07em;
+    text-transform: uppercase; display: block; margin-bottom: 1.5mm; color: var(--accent);
+  }
+  .callout.ok .t { color: var(--ok); }
+  .callout.warn .t { color: var(--warn); }
+  .callout.danger .t { color: var(--danger); }
+  .callout p:last-child { margin-bottom: 0; }
+
+  .badge {
+    display: inline-block; font-size: 7.6pt; font-weight: 700; letter-spacing: .04em;
+    padding: .6mm 2mm; border-radius: 20px; background: var(--rule-soft); color: var(--ink-2);
+  }
+  .badge.ok { background: var(--ok-soft); color: var(--ok); }
+  .badge.acc { background: var(--accent-soft); color: var(--accent); }
+
+  /* ------------------------------------------------------------------- QA */
+  .qa { break-inside: avoid; margin: 0 0 5mm; padding-left: 8mm; position: relative; }
+  .qa .q {
+    font-weight: 650; color: var(--ink); margin-bottom: 1.8mm; font-size: 10.2pt;
+  }
+  .qa .qn {
+    position: absolute; left: 0; top: .2mm; font-size: 8.4pt; font-weight: 700;
+    color: var(--accent); font-variant-numeric: tabular-nums;
+  }
+  .qa .a { color: var(--ink-2); }
+  .qa .a p { margin-bottom: 2mm; }
+  .qa .a ul { margin-bottom: 2mm; }
+  .qa .a > :last-child { margin-bottom: 0; }
+  .qa .tip {
+    margin-top: 2mm; font-size: 8.8pt; color: var(--muted);
+    border-left: 2px solid var(--rule); padding-left: 3mm;
+  }
+  .qa .tip b { color: var(--ink-2); }
+
+  .cat {
+    background: var(--ink); color: #fff; padding: 2.5mm 4mm; border-radius: 3px;
+    margin: 7mm 0 5mm; break-after: avoid; break-inside: avoid;
+  }
+  .cat .cn { font-size: 8pt; letter-spacing: .1em; opacity: .62; text-transform: uppercase; }
+  .cat .ct { font-size: 12pt; font-weight: 650; letter-spacing: -.01em; }
+
+  /* ------------------------------------------------------------------ toc */
+  .toc { column-count: 1; }
+  .toc-item {
+    display: flex; align-items: baseline; gap: 2mm;
+    padding: 1.7mm 0; border-bottom: 1px solid var(--rule-soft); font-size: 9.6pt;
+  }
+  .toc-item .tn {
+    color: var(--accent); font-weight: 700; width: 7mm; flex: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .toc-item .tt { font-weight: 550; }
+  .toc-item .td { color: var(--muted); font-size: 8.8pt; margin-left: auto; text-align: right; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .keep { break-inside: avoid; }
+  .small { font-size: 9pt; }
+  .muted { color: var(--muted); }
+  .mono { font-family: "Cascadia Mono", Consolas, monospace; font-size: .9em; }
+</style>
+
+<!-- ==================================================================== -->
+<div class="cover">
+  <div class="eyebrow">Technical Documentation &amp; Interview Guide</div>
+  <h1>Vaani</h1>
+  <div class="cover-rule"></div>
+  <p class="tagline">
+    A production-grade script localisation platform for comic, animation and dubbing
+    teams — translating across English and the 22 scheduled Indian languages, with
+    translation memory, a Postgres-backed job queue, realtime progress and a human
+    review loop that compounds.
+  </p>
+
+  <div class="cover-facts">
+    <div><div class="n">23</div><div class="l">Languages</div></div>
+    <div><div class="n">10</div><div class="l">Tables</div></div>
+    <div><div class="n">44</div><div class="l">Tests</div></div>
+    <div><div class="n">4,800+</div><div class="l">Lines TS</div></div>
+  </div>
+  <div class="cover-facts" style="margin-top:6mm;border-top:none;padding-top:0">
+    <div><div class="n">11</div><div class="l">Postgres RPCs</div></div>
+    <div><div class="n">23</div><div class="l">RLS policies</div></div>
+    <div><div class="n">34</div><div class="l">Indexes</div></div>
+    <div><div class="n">64%</div><div class="l">Cache hit rate</div></div>
+  </div>
+
+  <div class="cover-foot">
+    Next.js 15 &middot; TypeScript &middot; Supabase (Postgres, Auth, Realtime, RLS) &middot; Sarvam AI
+  </div>
+</div>
+
+<!-- ==================================================================== -->
+<h2><span class="num">00</span>Contents</h2>
+
+<div class="toc">
+  <div class="toc-item"><span class="tn">01</span><span class="tt">Executive Summary</span><span class="td">What it is, in one page</span></div>
+  <div class="toc-item"><span class="tn">02</span><span class="tt">Technology Stack &amp; Rationale</span><span class="td">Every choice, and why</span></div>
+  <div class="toc-item"><span class="tn">03</span><span class="tt">System Architecture</span><span class="td">Request and job flow</span></div>
+  <div class="toc-item"><span class="tn">04</span><span class="tt">Data Model</span><span class="td">10 tables, key decisions</span></div>
+  <div class="toc-item"><span class="tn">05</span><span class="tt">The Translation Pipeline</span><span class="td">The hardest part</span></div>
+  <div class="toc-item"><span class="tn">06</span><span class="tt">Job Queue &amp; Concurrency</span><span class="td">SKIP LOCKED, retries, recovery</span></div>
+  <div class="toc-item"><span class="tn">07</span><span class="tt">Translation Memory &amp; Cost</span><span class="td">500 rows for 8 API calls</span></div>
+  <div class="toc-item"><span class="tn">08</span><span class="tt">Security Model</span><span class="td">RLS, roles, key handling</span></div>
+  <div class="toc-item"><span class="tn">09</span><span class="tt">Scale Engineering</span><span class="td">Designing for 1M+ rows</span></div>
+  <div class="toc-item"><span class="tn">10</span><span class="tt">Testing &amp; Verification</span><span class="td">How it was proven</span></div>
+  <div class="toc-item"><span class="tn">11</span><span class="tt">Bugs Found &amp; Fixed</span><span class="td">Your best interview stories</span></div>
+  <div class="toc-item"><span class="tn">12</span><span class="tt">Limitations &amp; Roadmap</span><span class="td">Answering "what would you improve?"</span></div>
+  <div class="toc-item"><span class="tn">13</span><span class="tt">Interview Questions — Architecture</span><span class="td">Q1–Q8</span></div>
+  <div class="toc-item"><span class="tn">14</span><span class="tt">Interview Questions — Database</span><span class="td">Q9–Q20</span></div>
+  <div class="toc-item"><span class="tn">15</span><span class="tt">Interview Questions — Queue</span><span class="td">Q21–Q28</span></div>
+  <div class="toc-item"><span class="tn">16</span><span class="tt">Interview Questions — API Resilience</span><span class="td">Q29–Q36</span></div>
+  <div class="toc-item"><span class="tn">17</span><span class="tt">Interview Questions — Domain</span><span class="td">Q37–Q43</span></div>
+  <div class="toc-item"><span class="tn">18</span><span class="tt">Interview Questions — Frontend</span><span class="td">Q44–Q50</span></div>
+  <div class="toc-item"><span class="tn">19</span><span class="tt">Interview Questions — Security</span><span class="td">Q51–Q56</span></div>
+  <div class="toc-item"><span class="tn">20</span><span class="tt">Interview Questions — Behavioural</span><span class="td">Q57–Q62</span></div>
+  <div class="toc-item"><span class="tn">21</span><span class="tt">One-Page Cheat Sheet</span><span class="td">Read this before the call</span></div>
+</div>
+
+<div class="callout" style="margin-top:8mm">
+  <span class="t">How to use this document</span>
+  <p>
+    Sections 01–12 are the technical reference: what was built and, more importantly,
+    <em>why each decision was made</em>. Sections 13–20 are 62 interview questions with
+    model answers grounded in this specific codebase — not generic textbook answers.
+    Section 21 is a single page to review immediately before an interview.
+  </p>
+  <p style="margin-top:2mm">
+    The most valuable material for interviews is <strong>Section 11 (Bugs Found &amp; Fixed)</strong>.
+    Interviewers consistently probe for real debugging experience, and concrete bug
+    stories differentiate a project you built from a tutorial you followed.
+  </p>
+</div>
+
+<!-- ==================================================================== -->
+<h2><span class="num">01</span>Executive Summary</h2>
+<p class="lede">The problem, the solution, and the three ideas that make it work.</p>
+
+<h3>The problem</h3>
+<p>
+  Localisation teams working on comics, animation and dubbing handle scripts structured as
+  <strong>books → episodes → script rows</strong>. A single show can run to a million rows of
+  dialogue, each needing translation into many languages. Machine translation is cheap per call
+  but ruinous at that volume if applied naively, and raw MT output routinely destroys the things
+  a script depends on: character names, placeholders, sound cues, line breaks and numbering.
+</p>
+
+<h3>The solution</h3>
+<p>
+  Vaani is a multi-tenant web application that treats translation as a <em>pipeline</em> rather
+  than an API call. Users import scripts, press Translate, and watch progress stream in live while
+  a background worker drains a Postgres-backed queue. Every translation is cached; every human
+  correction is fed back into that cache so the same mistake is never paid for twice.
+</p>
+
+<h3>Three ideas that carry the design</h3>
+
+<table>
+  <tr>
+    <th style="width:32%">Idea</th>
+    <th>Why it matters</th>
+  </tr>
+  <tr>
+    <td><strong>Structural rule enforcement</strong></td>
+    <td>
+      Sarvam's <code>/translate</code> is a pure text-in/text-out endpoint with no system prompt,
+      so "preserve placeholders, keep line breaks, never summarise" cannot be <em>asked for</em>.
+      Every rule is instead guaranteed by construction — the model physically never sees the
+      protected content. Placeholders are masked to sentinels and <strong>verified</strong> on the
+      way back; if verification fails the row is parked rather than shipped.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>The queue lives in Postgres</strong></td>
+    <td>
+      No Redis, no RabbitMQ, no second broker to run and monitor. <code>SELECT … FOR UPDATE
+      SKIP LOCKED</code> gives safe multi-worker claiming for free, jobs are already in the
+      database beside the data they operate on, and progress rides Supabase Realtime to the
+      browser without a third moving part.
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Review compounds</strong></td>
+    <td>
+      A human correction updates the row <em>and</em> writes back to translation memory with
+      <code>origin = 'human'</code>. A database-level guard prevents machine output from ever
+      overwriting a human entry, so review effort accumulates permanently instead of being
+      undone by the next run.
+    </td>
+  </tr>
+</table>
+
+<h3>Measured result</h3>
+<div class="callout ok">
+  <span class="t">Verified on a real 500-row episode</span>
+  <p>
+    A Hindi → Tamil job over 500 script rows completed in roughly 12 seconds with
+    <strong>zero failures</strong> and <strong>8 Sarvam API calls</strong> — a 64% cache hit rate
+    on a cold start, achieved through in-batch deduplication plus translation memory. Placeholders,
+    stage cues and character names all survived intact.
+  </p>
+</div>
+
+<h3>Honest scope note</h3>
+<p>
+  Sarvam's translate endpoint covers English and the 22 scheduled Indian languages and
+  <strong>nothing else</strong>. Spanish, French, Japanese, Chinese and similar are unreachable
+  through this provider. Rather than list languages the product cannot deliver, the supported set
+  is defined in exactly one file (<code>languages.ts</code>) and the UI only ever offers what
+  genuinely works. The provider abstraction exists precisely so a second provider can widen this
+  later — that is a one-file change, not a refactor.
+</p>
+
+<!-- ==================================================================== -->
+<h2><span class="num">02</span>Technology Stack &amp; Rationale</h2>
+<p class="lede">Interviewers rarely ask <em>what</em> you used. They ask <em>why</em>.</p>
+
+<table>
+  <tr><th style="width:22%">Layer</th><th style="width:26%">Choice</th><th>Reasoning</th></tr>
+  <tr>
+    <td>Framework</td><td>Next.js 15 (App Router)</td>
+    <td>Server Components keep database queries on the server with no API layer to hand-write; Server Actions cover forms; Route Handlers cover the few real API endpoints. One deployable unit.</td>
+  </tr>
+  <tr>
+    <td>Language</td><td>TypeScript (strict)</td>
+    <td><code>strict</code> plus <code>noUncheckedIndexedAccess</code>. The latter forces every array access to be null-checked — it caught several real bugs during development.</td>
+  </tr>
+  <tr>
+    <td>Database</td><td>Supabase Postgres</td>
+    <td>Needed relational integrity, transactions, partial indexes, trigram search and <code>SKIP LOCKED</code>. Supabase adds Auth, Realtime and RLS on top of stock Postgres without giving any of it up.</td>
+  </tr>
+  <tr>
+    <td>Auth</td><td>Supabase Auth + RLS</td>
+    <td>Authorisation lives in the database, not the application. Even a bug in an API route cannot leak another tenant's rows.</td>
+  </tr>
+  <tr>
+    <td>Realtime</td><td>Supabase Realtime</td>
+    <td>Progress is broadcast once per settled slice. Polling from a dozen reviewers' browsers would cost more than the translation itself.</td>
+  </tr>
+  <tr>
+    <td>Queue</td><td>Postgres tables</td>
+    <td>See Section 06. Avoids an entire class of infrastructure and keeps jobs transactionally consistent with the data.</td>
+  </tr>
+  <tr>
+    <td>Translation</td><td>Sarvam AI</td>
+    <td>Purpose-built for Indic languages; <code>sarvam-translate:v1</code> covers all 22 scheduled languages, which general-purpose models handle poorly for low-resource scripts like Santali and Bodo.</td>
+  </tr>
+  <tr>
+    <td>Validation</td><td>Zod</td>
+    <td>Runtime validation at every trust boundary: environment variables at boot, request bodies at the edge.</td>
+  </tr>
+  <tr>
+    <td>Testing</td><td>Vitest</td>
+    <td>44 unit tests concentrated on the logic that is expensive to get wrong, plus a live-API check and a SQL smoke test.</td>
+  </tr>
+  <tr>
+    <td>Styling</td><td>Hand-written CSS</td>
+    <td>One stylesheet with CSS custom properties and automatic dark mode. No utility-class vocabulary layered on top of the domain vocabulary.</td>
+  </tr>
+</table>
+
+<div class="callout">
+  <span class="t">A stack question you should expect</span>
+  <p>
+    <em>"Why not Prisma / Drizzle / an ORM?"</em> — The heavy lifting is set-based: claim 100 rows
+    with <code>SKIP LOCKED</code>, write 100 results in one <code>UPDATE … FROM jsonb_to_recordset</code>,
+    roll up counters in the same transaction. Those are expressed naturally in SQL and awkwardly
+    through an ORM. The logic lives in Postgres functions, and TypeScript calls them as typed RPCs —
+    which keeps the round trips down and the type safety up.
+  </p>
+</div>
+
+<!-- ==================================================================== -->
+<h2><span class="num">03</span>System Architecture</h2>
+<p class="lede">What happens between pressing Translate and seeing Tamil on screen.</p>
+
+<h3>The critical insight: Translate does not translate</h3>
+<p>
+  Pressing the button <strong>enqueues</strong>. A 5,000-row episode would blow through any HTTP
+  request timeout long before it finished, so the request returns <code>202 Accepted</code> in
+  milliseconds and a background worker does the work.
+</p>
+
+<pre><code>BROWSER                    NEXT.JS                      POSTGRES                 SARVAM
+
+[Translate] ──POST────► /api/translate
+                          │ auth: getUser()
+                          └──RPC──────────────► enqueue_translation_job()
+                                                  ├ check org role
+                                                  ├ create translation rows
+                                                  ├ create job
+                                                  └ create N queue items
+            ◄──202 { jobId }──┘
+
+                        ── worker process (npm run worker) ──
+
+                        runWorkerTick()
+                          ├──RPC──────────────► requeue_stuck_job_items()
+                          ├──RPC──────────────► next_runnable_job()
+                          └──RPC──────────────► claim_job_items(limit 100)
+                                                  FOR UPDATE SKIP LOCKED
+                          │
+                          ├ dedupe identical rows in slice
+                          ├──RPC──────────────► translation_memory lookup
+                          ├─────────────────────────────────────────────► POST /translate
+                          │                                                (concurrency 8)
+                          ├──RPC──────────────► apply_translation_results()
+                          │                       one set-based UPDATE
+                          └──RPC──────────────► mark_job_items()
+                                                  settle queue + roll up counters
+                                                        │
+[progress bar] ◄══════ Supabase Realtime ═══════════════┘
+                       postgres_changes on translation_jobs</code></pre>
+
+<h3>Why progress is one broadcast per slice, not per row</h3>
+<p>
+  <code>mark_job_items()</code> settles a whole slice and recomputes the job counters
+  <em>in the same transaction</em>. That produces exactly one <code>UPDATE</code> on
+  <code>translation_jobs</code>, carrying a consistent snapshot. Realtime pushes that single event
+  to every subscriber. Updating per row would mean 500 broadcasts for one episode and a torn view
+  of progress in between.
+</p>
+
+<h3>Two ways to run the worker</h3>
+<table class="tight">
+  <tr><th style="width:34%">Mode</th><th>When to use it</th></tr>
+  <tr><td><code>npm run worker</code><br><span class="muted small">long-lived process</span></td>
+      <td>Preferred for throughput. Pays connection setup once and drains continuously. Run several in parallel — <code>SKIP LOCKED</code> guarantees they take disjoint slices.</td></tr>
+  <tr><td><code>POST /api/worker/tick</code><br><span class="muted small">HTTP, cron-driven</span></td>
+      <td>For serverless deployments (Vercel Cron, pg_cron, GitHub Actions). Bounded to 3 slices per tick so it returns inside the platform's function timeout; the remainder is picked up next tick. Guarded by a shared secret, not a user session.</td></tr>
+</table>
+
+<h3>Project layout</h3>
+<pre><code>src/
+├─ services/translation/          ← the domain core, framework-free
+│  ├─ types.ts        provider contract + caller-facing shapes
+│  ├─ languages.ts    the 23 real languages (single source of truth)
+│  ├─ sarvam.ts       provider: HTTP, retries, per-model limits
+│  ├─ preserve.ts     structural enforcement of localisation rules
+│  ├─ memory.ts       normalisation, hashing, cache port
+│  ├─ translator.ts   provider registry, routing, batching pipeline
+│  └─ runner.ts       job execution: claim → translate → write back → settle
+├─ lib/
+│  ├─ env.ts          Zod-validated server environment
+│  ├─ retry.ts        backoff with full jitter + bounded concurrency
+│  └─ supabase/       browser / session / service-role clients + DB types
+├─ app/               routes, API handlers, server actions
+└─ components/        translate panel, review table, forms
+supabase/migrations/  5 migrations: schema, RLS, RPCs, writeback, realtime
+scripts/              worker, seed, live API check</code></pre>
+
+<div class="callout">
+  <span class="t">Design principle worth stating in an interview</span>
+  <p>
+    Everything under <code>services/translation/</code> is <strong>framework-free</strong>. It
+    imports no Next.js, and the database is reached through a <code>MemoryPort</code> interface
+    rather than a Supabase client. That is why the entire pipeline can be unit-tested with an
+    in-memory fake and no database — and why swapping the web framework would not touch the
+    domain logic.
+  </p>
+</div>
+
+<!-- ==================================================================== -->
+<h2><span class="num">04</span>Data Model</h2>
+<p class="lede">Ten tables. Every column earns its place.</p>
+
+<pre><code>organizations ──┬── org_members ──── profiles ──── auth.users
+                │                                    (Supabase-managed)
+                └── books ──── episodes ──── script_rows ──┬── translations
+                                                  │        │
+                                                  │        └── (script_row_id,
+                                                  │             target_language) UNIQUE
+                                                  │
+                    translation_jobs ── translation_job_items
+                    translation_memory  (org-scoped cache, hash-keyed)</code></pre>
+
+<h3>Core tables</h3>
+<table class="tight">
+  <tr><th style="width:26%">Table</th><th style="width:16%">Key type</th><th>Purpose &amp; notable decision</th></tr>
+  <tr><td><code>organizations</code></td><td>uuid</td><td>Tenant boundary. Every other table carries <code>org_id</code>.</td></tr>
+  <tr><td><code>org_members</code></td><td>composite</td><td>Role per user per org: owner / editor / reviewer / viewer.</td></tr>
+  <tr><td><code>books</code></td><td>uuid</td><td>Holds <code>source_language</code> — a book is authored in exactly one language.</td></tr>
+  <tr><td><code>episodes</code></td><td>uuid</td><td><code>UNIQUE (book_id, number)</code>.</td></tr>
+  <tr><td><code>script_rows</code></td><td><strong>bigint identity</strong></td><td>The large table. See below for why not uuid.</td></tr>
+  <tr><td><code>translations</code></td><td>bigint identity</td><td>One row per (script row × target language). Largest table in practice.</td></tr>
+  <tr><td><code>translation_memory</code></td><td>bigint identity</td><td>Hash-keyed cache, unique on (org, hash, source lang, target lang).</td></tr>
+  <tr><td><code>translation_jobs</code></td><td>uuid</td><td>Progress counters; broadcast over Realtime.</td></tr>
+  <tr><td><code>translation_job_items</code></td><td>bigint identity</td><td>The queue itself, one row per unit of work.</td></tr>
+  <tr><td><code>profiles</code></td><td>uuid → auth.users</td><td>Created automatically by a trigger on signup.</td></tr>
+</table>
+
+<h3>Four decisions worth defending</h3>
+
+<h4>1. <code>bigint identity</code> for script_rows, not uuid</h4>
+<p>
+  Rows are always read in <code>row_index</code> order within an episode, and every row is
+  referenced by a foreign key from <code>translations</code>. A uuid is 16 bytes and random; a
+  bigint is 8 bytes and sequential. At a million rows across several target languages this keeps
+  the hot B-tree compact and the inserts append-only rather than scattered across the index.
+</p>
+
+<h4>2. <code>org_id</code> denormalised onto every table</h4>
+<p>
+  It could be derived by joining <code>script_rows → episodes → books</code>. It is stored directly
+  instead, because <strong>every RLS policy evaluates on every row read</strong>. Making that a
+  single indexed lookup rather than a two-level join is the difference between an RLS predicate
+  that is free and one that dominates the query plan.
+</p>
+
+<h4>3. Partial indexes on hot, selective predicates</h4>
+<pre><code>-- The claim query only ever looks at queued work, so the index stays
+-- small even when millions of finished items sit in the table.
+create index translation_job_items_claimable_idx
+  on translation_job_items (job_id, id)
+  where status = 'queued';
+
+-- Only one live job per (episode, language). A second Translate click
+-- resumes the existing job instead of double-spending on the API.
+create unique index translation_jobs_active_idx
+  on translation_jobs (episode_id, target_language)
+  where status in ('queued', 'running');</code></pre>
+<p>
+  That second index is not an optimisation — it is a <strong>correctness constraint enforced by the
+  database</strong>. Concurrency bugs in application code cannot produce a duplicate live job.
+</p>
+
+<h4>4. Trigram GIN indexes for search</h4>
+<pre><code>create extension pg_trgm;
+create index script_rows_text_trgm_idx
+  on script_rows using gin (source_text gin_trgm_ops);</code></pre>
+<p>
+  This makes <code>ILIKE '%query%'</code> index-backed. A B-tree cannot serve a leading wildcard,
+  and full-text search (<code>tsvector</code>) does stemmed word matching rather than substring
+  matching — wrong for finding a partial character name or a fragment of dialogue.
+</p>
+
+<h3>Status model</h3>
+<table class="tight">
+  <tr><th style="width:22%">Status</th><th>Meaning</th></tr>
+  <tr><td><code>pending</code></td><td>Row exists, nothing translated yet.</td></tr>
+  <tr><td><code>machine</code></td><td>Machine output, untouched by a human.</td></tr>
+  <tr><td><code>edited</code></td><td>A human changed the machine output.</td></tr>
+  <tr><td><code>approved</code></td><td>A reviewer signed it off.</td></tr>
+  <tr><td><code>failed</code></td><td>Retries exhausted; needs manual attention.</td></tr>
+</table>
+<p class="small muted">
+  The distinction matters: <code>apply_translation_results()</code> only writes to rows in
+  <code>('pending','failed','machine')</code>, so a reviewer editing a row mid-job can never be
+  overwritten by the machine output arriving a second later.
+</p>
+
+<!-- ==================================================================== -->
+<h2><span class="num">05</span>The Translation Pipeline</h2>
+<p class="lede">The hardest engineering in the project, and the richest interview material.</p>
+
+<h3>The constraint that shapes everything</h3>
+<p>
+  An LLM chat endpoint lets you <em>ask</em> for behaviour: "preserve placeholders, keep the line
+  breaks, do not summarise." Sarvam's <code>/translate</code> is a pure text-in/text-out endpoint.
+  There is no system prompt. Asking is not available.
+</p>
+<p>
+  So every rule is enforced <strong>structurally</strong> — by controlling what the model is
+  physically shown:
+</p>
+
+<table class="tight">
+  <tr><th style="width:34%">Rule</th><th>How it is guaranteed</th></tr>
+  <tr><td>Character names preserved</td><td>Speaker prefix is split off and reattached; only the dialogue is sent.</td></tr>
+  <tr><td>Placeholders preserved</td><td><code>{x}</code>, <code>{{x}}</code>, <code>%s</code>, <code>&lt;b&gt;</code>, <code>[SFX: …]</code>, <code>${x}</code> masked to sentinels, restored after, and <strong>verified</strong>.</td></tr>
+  <tr><td>Line breaks preserved</td><td>Each line translated separately, rejoined with its original separator (<code>\n</code>, <code>\r\n</code>, <code>\r</code>).</td></tr>
+  <tr><td>Numbering preserved</td><td>Leading <code>1.</code>, <code>1)</code>, <code>-</code>, <code>*</code>, <code>•</code> markers never enter the payload.</td></tr>
+  <tr><td>Punctuation &amp; spacing</td><td>Leading/trailing whitespace split off and reattached verbatim.</td></tr>
+  <tr><td>No summarising</td><td>The model only ever sees one line at a time — there is nothing to summarise.</td></tr>
+</table>
+
+<h3>The pipeline, step by step</h3>
+<pre><code>translateText(text)
+  └─ splitLines()                    keep exact separators
+     └─ for each line: translateLine()
+        ├─ protect(line, style)      MASK FIRST — order is load-bearing
+        ├─ splitLine(masked)         → { marker, speaker, body, trailing }
+        ├─ hasTranslatableContent()  no letters? return free, 0 API calls
+        ├─ chunkText(body, 2000)     sentence-boundary aware, danda-aware
+        ├─ provider.translate()      per chunk
+        ├─ joinLine(parts, body)     reattach marker + speaker + whitespace
+        ├─ missingTokens()           VERIFY every sentinel came back
+        │    └─ missing? retry with a different sentinel shape
+        │       └─ still missing? THROW — park the row, never ship it
+        └─ restore()                 put the real placeholders back</code></pre>
+
+<div class="callout warn">
+  <span class="t">Masking must happen before speaker splitting</span>
+  <p>
+    A stage cue like <code>[SFX: door creaks]</code> contains a colon. Splitting first makes
+    <code>[SFX</code> look like a speaker name and sends <code>door creaks]</code> off to be
+    translated — producing <code>[SFX: கதவு கீச்சிடுகிறது.</code> with the bracket destroyed.
+    Masking first turns the whole cue into one opaque token, so there is no colon left to trip on.
+    <strong>This was a real bug, caught by testing against the live API.</strong> See Section 11.
+  </p>
+</div>
+
+<h3>Verification, and why failing loudly is correct</h3>
+<p>
+  After translation the pipeline checks that every sentinel came back. If not, it retries with a
+  different sentinel shape. If that also fails, it <strong>throws</strong> rather than returning
+  text with mangled markup:
+</p>
+<pre><code>throw new TranslationError(
+  `Placeholders did not survive translation (${lastMissing.join(", ")}). ` +
+    `Row parked for manual localisation rather than shipping broken markup.`,
+  { retryable: false },
+);</code></pre>
+<p>
+  A flagged row is recoverable — it appears in the review queue with the error attached. Silent
+  corruption spread across a million-row script is not. This is a deliberate trade of availability
+  for correctness, and it is exactly the kind of judgement interviewers probe for.
+</p>
+
+<h3>Empirically choosing a sentinel</h3>
+<p>
+  The sentinel shape is not a guess. Eight candidates were tested against the live API across four
+  target languages:
+</p>
+<table class="tight">
+  <tr><th>Sentinel</th><th>Survival</th><th>Verdict</th></tr>
+  <tr><td><code>#0#</code></td><td>3 / 3 valid pairs</td><td><span class="badge ok">chosen — primary</span></td></tr>
+  <tr><td><code>((0))</code></td><td>3 / 3</td><td><span class="badge ok">chosen — fallback</span></td></tr>
+  <tr><td><code>[[0]]</code>, <code>@0@</code>, <code>__0__</code>, <code>{0}</code>, <code>XX0XX</code></td><td>3 / 3</td><td><span class="badge">viable</span></td></tr>
+  <tr><td><code>&lt;0&gt;</code></td><td>2 / 3 — Tamil dropped the <code>&gt;</code></td><td><span class="badge">rejected</span></td></tr>
+</table>
+<p class="small muted">
+  Two shapes are kept because the model is non-deterministic: the same input occasionally loses a
+  sentinel that survived a moment earlier. The two-shape retry converts a random failure into a
+  second attempt rather than a parked row.
+</p>
+
+<h3>The provider abstraction</h3>
+<pre><code>export interface TranslationProvider {
+  readonly name: string;
+  readonly model: string;
+  readonly maxInputChars: number;
+  supports(source: LanguageCode, target: LanguageCode): boolean;
+  translate(request: ProviderRequest): Promise&lt;ProviderResult&gt;;
+}</code></pre>
+<p>
+  <code>maxInputChars</code> lets the caller chunk correctly per provider without hardcoding any
+  provider's limit (Sarvam: 2,000 chars for <code>sarvam-translate:v1</code>, 1,000 for
+  <code>mayura:v1</code>). <code>supports()</code> lets the router skip a provider that cannot serve
+  a language pair instead of discovering it through a 400. Adding Gemini or OpenAI is one new class
+  plus one line in the registry — registration order is preference order.
+</p>
+
+<!-- ==================================================================== -->
+<h2><span class="num">06</span>Job Queue &amp; Concurrency</h2>
+<p class="lede">Why Postgres is a legitimate queue, and how failure is handled.</p>
+
+<h3>The claim, in full</h3>
+<pre><code>with claimed as (
+  select i.id
+  from translation_job_items i
+  where i.job_id = p_job_id
+    and i.status = 'queued'
+  order by i.id
+  limit p_limit
+  for update skip locked          -- ← the whole trick
+),
+locked as (
+  update translation_job_items i
+  set status = 'running',
+      attempts = i.attempts + 1,
+      locked_at = now(),
+      locked_by = p_worker
+  from claimed c
+  where i.id = c.id
+  returning i.script_row_id, i.attempts
+)
+select sr.id, sr.row_index, sr.character_name, sr.source_text, sr.notes, l.attempts
+from locked l
+join script_rows sr on sr.id = l.script_row_id
+order by sr.row_index;</code></pre>
+
+<p>
+  <code>FOR UPDATE SKIP LOCKED</code> tells Postgres: lock these rows, and if another transaction
+  already holds a lock on one, <em>skip it rather than waiting</em>. Each worker therefore takes a
+  disjoint slice and never blocks on another worker. Without <code>SKIP LOCKED</code>, ten workers
+  would serialise behind one another on the same rows — the classic naive-queue failure.
+</p>
+
+<h3>Four failure modes, four answers</h3>
+<table class="tight">
+  <tr><th style="width:28%">Failure</th><th>Handling</th></tr>
+  <tr><td>Transient API error<br><span class="muted small">429, 5xx, timeout</span></td>
+      <td>Retried inside the provider with exponential backoff and <strong>full jitter</strong>, honouring <code>Retry-After</code>.</td></tr>
+  <tr><td>Row keeps failing</td>
+      <td>Requeued until <code>TRANSLATION_MAX_ATTEMPTS</code>, then parked as <code>failed</code> with the error visible in the review table.</td></tr>
+  <tr><td>Worker dies mid-slice</td>
+      <td>Items stay <code>running</code> forever. <code>requeue_stuck_job_items()</code> reclaims anything locked more than 10 minutes on the next tick.</td></tr>
+  <tr><td>Permanent error<br><span class="muted small">400, bad key, unsupported pair</span></td>
+      <td>Never retried. The whole slice is returned to the queue and the job fails loudly rather than grinding through 500 rows to reach the same conclusion.</td></tr>
+</table>
+
+<h3>Why full jitter</h3>
+<pre><code>const ceiling = Math.min(maxDelayMs, baseDelayMs * 2 ** (attempt - 1));
+const delay = retryAfterMs?.(error) ?? Math.random() * ceiling;</code></pre>
+<p>
+  Random between zero and the computed ceiling, not the ceiling itself. When a rate limit trips,
+  every in-flight worker sees it at the same instant; identical sleeps would reconverge them onto
+  the same wall. Jitter spreads the retries out.
+</p>
+
+<h3>Idempotency</h3>
+<p>
+  <code>enqueue_translation_job()</code> is idempotent. Clicking Translate twice returns the
+  existing job rather than creating a second one — enforced both by an explicit check and by the
+  partial unique index, so it holds even under a race.
+</p>
+
+<!-- ==================================================================== -->
+<h2><span class="num">07</span>Translation Memory &amp; Cost Optimisation</h2>
+<p class="lede">The commercial argument for the whole design.</p>
+
+<h3>Four layers, in the order they apply</h3>
+<table class="tight">
+  <tr><th style="width:8%">#</th><th style="width:30%">Layer</th><th>Effect</th></tr>
+  <tr><td>1</td><td>Skip untranslatable rows</td><td>Lines with no letters (<code>...</code>, <code>---</code>, <code>42</code>, bare placeholders) return unchanged for zero calls.</td></tr>
+  <tr><td>2</td><td>In-slice deduplication</td><td>Identical rows in one slice collapse to a single call even on a completely cold cache.</td></tr>
+  <tr><td>3</td><td>Translation memory</td><td>Every source line hashed and looked up first. Catchphrases, SFX, intros and re-cut dialogue paid for once.</td></tr>
+  <tr><td>4</td><td>Human corrections persist</td><td>Reviewed wording is reused forever and protected from machine overwrite.</td></tr>
+</table>
+
+<div class="callout ok">
+  <span class="t">The number that tells the story</span>
+  <p style="font-size:11pt">
+    <strong>500 script rows → 8 Sarvam API calls.</strong> Ten unique lines among the 500; one of
+    them (<code>...</code>) cost nothing; the rest were absorbed by deduplication and memory.
+    Reported cache hit rate: <strong>64%</strong> on first run, rising toward 100% on re-runs.
+  </p>
+</div>
+
+<h3>Normalisation lives in exactly one place</h3>
+<pre><code>export function normalizeForMemory(text: string): string {
+  return text
+    .normalize("NFC")          // visually identical Devanagari/Tamil must match
+    .replace(/\r\n?/g, "\n")
+    .replace(/[^\S\n]+/g, " ") // horizontal whitespace is presentation
+    .replace(/ *\n */g, "\n")  // newlines are structural — kept
+    .trim();
+}
+export function memoryHash(text: string): string {
+  return createHash("sha256").update(normalizeForMemory(text), "utf8").digest("hex");
+}</code></pre>
+<p>
+  The hash is computed in the application rather than as a Postgres generated column,
+  <em>deliberately</em>: two implementations of the same normalisation would silently drift and
+  split the cache in two. One implementation, one source of truth.
+</p>
+<p class="small muted">
+  NFC matters more than it looks. Indic scripts can compose the same visible glyph from different
+  code point sequences; without normalisation two identical-looking lines would hash differently
+  and both be paid for.
+</p>
+
+<h3>Human corrections outrank machines — enforced in SQL</h3>
+<pre><code>on conflict (org_id, source_hash, source_language, target_language)
+do update set
+  translated_text = excluded.translated_text,
+  updated_at = now()
+where translation_memory.origin = 'machine'    -- ← the guard
+   or excluded.origin = 'human';</code></pre>
+<p>
+  A machine result can overwrite a machine entry. A machine result can <strong>never</strong>
+  overwrite a human one. A human result can overwrite anything. This is enforced at the database
+  level, so no application path — including a future one nobody has written yet — can violate it.
+</p>
+
+<!-- ==================================================================== -->
+<h2><span class="num">08</span>Security Model</h2>
+<p class="lede">Authorisation in the database, secrets on the server.</p>
+
+<h3>Three clients, three trust levels</h3>
+<table class="tight">
+  <tr><th style="width:26%">Client</th><th style="width:20%">Key</th><th>Trust</th></tr>
+  <tr><td><code>lib/supabase/client.ts</code></td><td>anon</td><td>Browser. Everything it can reach is bounded by RLS.</td></tr>
+  <tr><td><code>lib/supabase/server.ts</code></td><td>anon + session</td><td>Server Components and Route Handlers, acting as the signed-in user. Still subject to RLS.</td></tr>
+  <tr><td><code>lib/supabase/admin.ts</code></td><td><strong>service role</strong></td><td>Worker only. <strong>Bypasses RLS entirely.</strong></td></tr>
+</table>
+
+<h3>Role matrix</h3>
+<table class="tight">
+  <tr><th>Role</th><th>Read</th><th>Content</th><th>Start jobs</th><th>Edit translations</th><th>Membership</th></tr>
+  <tr><td>owner</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+  <tr><td>editor</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td></tr>
+  <tr><td>reviewer</td><td>✓</td><td>—</td><td>—</td><td>✓</td><td>—</td></tr>
+  <tr><td>viewer</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+</table>
+<p class="small muted">
+  Reviewers can correct translations but cannot alter source content — reviewing <em>is</em> the job
+  of correcting machine output, but a reviewer rewriting the original script would be a different
+  and unwanted power.
+</p>
+
+<h3>Avoiding infinite RLS recursion</h3>
+<pre><code>create or replace function is_org_member(p_org uuid)
+returns boolean language sql stable
+security definer                    -- ← breaks the recursion
+set search_path = public
+as $$
+  select exists (
+    select 1 from org_members m
+    where m.org_id = p_org and m.user_id = auth.uid()
+  );
+$$;</code></pre>
+<p>
+  Without <code>SECURITY DEFINER</code>, the policy on <code>org_members</code> would query
+  <code>org_members</code> through RLS, which would invoke the policy again — infinite recursion.
+  <code>set search_path = public</code> is mandatory on any <code>SECURITY DEFINER</code> function:
+  it prevents a caller from shadowing a table name with their own and hijacking the elevated
+  privilege.
+</p>
+
+<h3>Secrets</h3>
+<ul>
+  <li><code>SARVAM_API_KEY</code> and <code>SUPABASE_SERVICE_ROLE_KEY</code> are server-only, validated by Zod at boot, and never prefixed <code>NEXT_PUBLIC_</code>.</li>
+  <li>Modules holding them throw at import time if <code>window</code> is defined — a runtime guard used instead of <code>server-only</code> because the standalone worker runs outside Next and must import them too.</li>
+  <li><code>.env.local</code> is gitignored; <code>.env.example</code> documents the shape with no values.</li>
+  <li><code>/api/worker/tick</code> is guarded by a shared secret rather than a session, because there is no user in that flow.</li>
+</ul>
+
+<!-- ==================================================================== -->
+<h2><span class="num">09</span>Scale Engineering</h2>
+<p class="lede">Targets: 100+ books, 10,000+ episodes, 1,000,000+ script rows.</p>
+
+<table>
+  <tr><th style="width:32%">Requirement</th><th>Mechanism</th></tr>
+  <tr><td>1M+ script rows</td><td><code>bigint identity</code> primary key; compact B-tree; append-only inserts.</td></tr>
+  <tr><td>Fast search</td><td><code>pg_trgm</code> GIN indexes; <code>ILIKE</code> becomes index-backed.</td></tr>
+  <tr><td>Deep pagination</td><td><strong>Keyset</strong> (<code>id &gt; p_after</code>), never <code>OFFSET</code>.</td></tr>
+  <tr><td>RLS at volume</td><td><code>org_id</code> denormalised; single index lookup per policy check.</td></tr>
+  <tr><td>Bulk writeback</td><td>One <code>UPDATE … FROM jsonb_to_recordset</code> per slice instead of N statements.</td></tr>
+  <tr><td>Queue at volume</td><td>Partial index on <code>status = 'queued'</code> keeps the index small as finished rows accumulate.</td></tr>
+  <tr><td>Many reviewers</td><td>One Realtime broadcast per slice, not per row, not per client poll.</td></tr>
+  <tr><td>Horizontal scale</td><td>N workers; <code>SKIP LOCKED</code> is the only contended step.</td></tr>
+</table>
+
+<h3>Keyset vs OFFSET — know this cold</h3>
+<pre><code>-- ✗ OFFSET must walk and discard every row it skips.
+select * from script_rows order by id offset 900000 limit 100;
+
+-- ✓ Keyset jumps straight into the index.
+select * from script_rows where id &gt; 900000 order by id limit 100;</code></pre>
+<p>
+  At page 9,000 the first query reads 900,100 rows to return 100. The second reads 100. Keyset
+  pagination is also stable under concurrent inserts, where OFFSET can skip or repeat rows.
+</p>
+
+<h3>The next structural step</h3>
+<p>
+  At roughly 50M rows the answer is <strong>partitioning</strong> <code>script_rows</code> and
+  <code>translations</code> by <code>book_id</code>. Nothing in the current design blocks that —
+  queries already filter by episode or book, so partition pruning would apply immediately. Being
+  able to name the <em>next</em> bottleneck, and why it is not yet worth paying for, is a strong
+  signal in a design interview.
+</p>
+
+<!-- ==================================================================== -->
+<h2><span class="num">10</span>Testing &amp; Verification</h2>
+<p class="lede">Three independent layers, because each catches what the others cannot.</p>
+
+<table class="tight">
+  <tr><th style="width:26%">Layer</th><th style="width:16%">Scope</th><th>Catches</th></tr>
+  <tr><td><strong>44 unit tests</strong><br><span class="muted small">Vitest, fake provider</span></td><td>Pure logic</td><td>Placeholder round-trip, speaker splitting, chunking, provider routing, batch dedup, memory hits, failure isolation.</td></tr>
+  <tr><td><strong>SQL smoke test</strong><br><span class="muted small">12 steps, real Postgres 18</span></td><td>Database</td><td>Enqueue idempotency, <code>SKIP LOCKED</code> claiming, writeback, progress roll-up, stuck-item recovery, RLS denial.</td></tr>
+  <tr><td><strong>Live API check</strong><br><span class="muted small"><code>npm run check:sarvam</code></span></td><td>Integration</td><td>Real model behaviour — the only layer that can catch a rule that survives a fake but not reality.</td></tr>
+</table>
+
+<h3>Why a local Postgres cluster, not mocks</h3>
+<p>
+  The migrations were validated by spinning up a throwaway PostgreSQL 18 cluster with
+  <code>initdb</code>, stubbing the Supabase-managed objects (<code>auth.users</code>,
+  <code>auth.uid()</code>, the <code>supabase_realtime</code> publication), and applying the real
+  migration files. This caught two bugs that no amount of code review would have:
+  a column-count mismatch and an untyped <code>CASE</code> expression (Section 11).
+</p>
+
+<h3>The 12-step smoke test</h3>
+<pre><code> 1  enqueue                          →  queued, 4 rows
+ 2  enqueue again                    →  same job id, no duplicate
+ 3  claim a slice                    →  attempts=1, ordered, job → running
+ 4  bulk writeback                   →  4 rows written
+ 5  settle + roll up                 →  completed, 4/4, tm_hits=1
+ 6  episode progress                 →  4 machine
+ 7  human correction                 →  written to memory, origin=human
+ 8  machine overwrite attempt (TM)   →  BLOCKED ✓
+ 9  machine overwrite attempt (row)  →  0 rows written ✓
+10  search + keyset pagination       →  correct rows, translation ids
+11  stuck-item recovery              →  requeued, then parked as failed
+12  viewer starts a job              →  insufficient_privilege ✓</code></pre>
+<p class="small muted">
+  Steps 8, 9 and 12 are the important ones: they assert that something <em>cannot</em> happen.
+  Negative tests are what prove a security or integrity guarantee.
+</p>
+
+<!-- ==================================================================== -->
+<h2><span class="num">11</span>Bugs Found &amp; Fixed</h2>
+<p class="lede">The most valuable interview material in this document. Real bugs, real diagnoses.</p>
+
+<div class="callout">
+  <span class="t">Why this section matters most</span>
+  <p>
+    Interviewers use debugging stories to separate people who built something from people who
+    followed a tutorial. Each of these has the structure they want: <strong>symptom → investigation
+    → root cause → fix → prevention</strong>. Learn two or three well enough to tell without notes.
+  </p>
+</div>
+
+<h3>Bug 1 — The stage cue that got translated <span class="badge acc">best story</span></h3>
+<table class="tight">
+  <tr><td style="width:20%"><strong>Symptom</strong></td><td><code>[SFX: door creaks]</code> came back as <code>[SFX: கதவு கீச்சிடுகிறது.</code> — cue translated, closing bracket destroyed.</td></tr>
+  <tr><td><strong>Found by</strong></td><td>The live-API check. <strong>Unit tests could not catch it</strong> — the fake provider echoed text back unchanged, so the structural mistake was invisible.</td></tr>
+  <tr><td><strong>Root cause</strong></td><td>Speaker splitting ran <em>before</em> placeholder masking. The cue contains a colon, so <code>[SFX</code> matched the speaker pattern and <code>door creaks]</code> was sent as dialogue.</td></tr>
+  <tr><td><strong>Fix</strong></td><td>Mask the whole line first, <em>then</em> split the speaker — the cue becomes one opaque token with no colon. Plus a rule that character names never contain brackets.</td></tr>
+  <tr><td><strong>Prevention</strong></td><td>Regression tests in both <code>preserve.test.ts</code> and <code>translator.test.ts</code>. API calls for the sample set also dropped from 6 to 4.</td></tr>
+</table>
+<p class="small muted">
+  <strong>The lesson to articulate:</strong> mocks verify the contract you imagined; only the real
+  dependency verifies the contract that exists. This bug lived in the <em>ordering</em> of two
+  correct functions — neither was wrong alone.
+</p>
+
+<h3>Bug 2 — TypeScript interfaces silently breaking Supabase types</h3>
+<table class="tight">
+  <tr><td style="width:20%"><strong>Symptom</strong></td><td>~60 type errors. Every query result typed as <code>never</code>; <code>Property 'title' does not exist on type 'never'</code>.</td></tr>
+  <tr><td><strong>Root cause</strong></td><td>Supabase's <code>GenericSchema</code> requires <code>Row extends Record&lt;string, unknown&gt;</code>. <strong>TypeScript <code>interface</code> declarations do not get an implicit index signature; <code>type</code> aliases do.</strong> The schema silently failed the constraint and collapsed to <code>never</code>.</td></tr>
+  <tr><td><strong>Diagnosis</strong></td><td>Wrote a minimal probe file asserting <code>Database["public"] extends GenericSchema</code>, which isolated the failure in seconds instead of guessing across 60 errors.</td></tr>
+  <tr><td><strong>Fix</strong></td><td>Converted all 14 row shapes from <code>interface</code> to <code>type</code>. Errors: 60 → 6.</td></tr>
+</table>
+
+<h3>Bug 3 — Column count mismatch in a Postgres function</h3>
+<p>
+  <code>insert into translation_job_items (job_id, script_row_id) select sr.id from …</code> — two
+  target columns, one selected expression. <strong>Caught by applying migrations to a real
+  Postgres</strong>, not by review. Fix: <code>select v_job_id, sr.id</code>.
+</p>
+
+<h3>Bug 4 — Untyped CASE expression</h3>
+<p>
+  <code>status = case when v_total = 0 then 'completed' else 'queued' end</code> fails with
+  <em>"column status is of type job_status but expression is of type text"</em>. Postgres will not
+  implicitly cast a <code>CASE</code> result to an enum. Fix: <code>'completed'::job_status</code> on
+  both branches. Present in two functions.
+</p>
+
+<h3>Bug 5 — The dead Translate button <span class="badge acc">good UX story</span></h3>
+<table class="tight">
+  <tr><td style="width:20%"><strong>Symptom</strong></td><td>User reported "translation is not working."</td></tr>
+  <tr><td><strong>Investigation</strong></td><td>Queried the live database first rather than guessing. The job had <em>completed</em>: 500/500, zero failures, correct text present. The backend was healthy.</td></tr>
+  <tr><td><strong>Root cause</strong></td><td>The page defaults to English for a Hindi source book — and English was <em>already fully translated</em>. <code>pendingRows === 0</code> rendered a greyed-out "Translate 0 rows". <strong>A finished episode looked identical to a broken one.</strong></td></tr>
+  <tr><td><strong>Fix</strong></td><td>The button now reads its state: "Translate 500 rows" / "Re-translate 500 rows" + an "All 500 rows translated" badge / "Nothing to translate".</td></tr>
+</table>
+<p class="small muted">
+  <strong>The lesson:</strong> "not working" is a symptom, not a diagnosis. Reproducing against real
+  data before touching code turned a suspected pipeline failure into a five-minute UI fix. Also: a
+  disabled control with no explanation is indistinguishable from a broken one.
+</p>
+
+<h3>Bug 6 — Realtime silently delivering nothing</h3>
+<p>
+  <code>translation_jobs</code> is RLS-protected <em>and</em> broadcast over Realtime, and the UI
+  filters on <code>episode_id</code> — a non-key column. With the default replica identity, an
+  <code>UPDATE</code> only writes the <strong>primary key</strong> of the old row to the WAL, so
+  Realtime can neither evaluate RLS nor match that filter. Events never arrive; nothing errors; the
+  progress bar sits at 0% while the job actually finishes. Fix:
+  <code>alter table translation_jobs replica identity full;</code>
+</p>
+
+<h3>Bug 7 — Environment, not code</h3>
+<p>
+  Windows Application Control blocked rollup's native <code>.node</code> binary
+  (<code>ERR_DLOPEN_FAILED</code>). The error message blames an npm optional-dependency bug and
+  suggests reinstalling — advice that loops forever, because the real cause is OS policy. Fix: an
+  npm <code>override</code> routing <code>rollup</code> to <code>@rollup/wasm-node</code>.
+  <em>Worth telling as "the error message pointed at the wrong layer."</em>
+</p>
+
+<!-- ==================================================================== -->
+<h2><span class="num">12</span>Limitations &amp; Roadmap</h2>
+<p class="lede">"What would you do differently?" — have this ready.</p>
+
+<h3>Known limitations</h3>
+<table class="tight">
+  <tr><th style="width:30%">Limitation</th><th>Assessment</th></tr>
+  <tr><td>Only 23 languages</td><td>A provider constraint, not an architectural one. The abstraction exists to fix it.</td></tr>
+  <tr><td>Single-org UI</td><td>The schema supports multi-org membership; the UI picks the first. Needs an org switcher.</td></tr>
+  <tr><td>No glossary / term base</td><td>Real localisation teams need enforced terminology ("always translate X as Y"). The clearest next feature.</td></tr>
+  <tr><td>No import from FDX / CSV / SRT</td><td>Import is line-based paste. Industry formats matter for real adoption.</td></tr>
+  <tr><td>Row-level TM only</td><td>Caching whole rows misses sub-sentence reuse. Segment-level TM would raise hit rates further.</td></tr>
+  <tr><td>Hand-maintained DB types</td><td>Should be generated by <code>supabase gen types</code> in CI to prevent drift.</td></tr>
+  <tr><td><code>/api/translate</code> returns 307, not 401</td><td>Middleware redirects before the route can answer. Cosmetic for the app, unidiomatic for API callers.</td></tr>
+</table>
+
+<h3>Roadmap, in priority order</h3>
+<ol>
+  <li><strong>Glossary / term base</strong> — enforced terminology, applied as protected spans before translation. Reuses the existing masking machinery.</li>
+  <li><strong>Second provider</strong> — unlocks non-Indic languages; the interface is already defined.</li>
+  <li><strong>Segment-level translation memory</strong> — higher hit rate, lower cost.</li>
+  <li><strong>Quality signals</strong> — flag suspicious output (length ratio far from expected, untranslated Latin text in an Indic target) for review.</li>
+  <li><strong>Import/export</strong> — CSV, SRT, FDX round-tripping.</li>
+  <li><strong>Partitioning</strong> — when row counts approach 50M.</li>
+</ol>
+
+<!-- ==================================================================== -->
+<h2><span class="num">13</span>Interview Questions — Architecture</h2>
+<p class="lede">Questions 1–8. Start every answer with the decision, then the reason.</p>
+
+<div class="cat"><div class="cn">Category A</div><div class="ct">System design &amp; architecture</div></div>
+
+<div class="qa"><span class="qn">Q1</span>
+  <div class="q">Walk me through this project in two minutes.</div>
+  <div class="a">
+    <p>
+      Vaani is a script localisation platform for comic and dubbing teams. Content is modelled as
+      books → episodes → script rows, and a single show can reach a million rows needing
+      translation into many languages.
+    </p>
+    <p>
+      Users import a script and press Translate. That doesn't translate anything — it enqueues a job
+      in Postgres and returns immediately, because a 5,000-row episode would blow any request
+      timeout. A background worker claims rows in slices using <code>SKIP LOCKED</code>, checks
+      translation memory, sends only genuinely new lines to Sarvam AI with bounded concurrency,
+      writes results back in one set-based statement, and updates progress — which streams to the
+      browser over Supabase Realtime.
+    </p>
+    <p>
+      The hardest part was quality. Sarvam's endpoint has no system prompt, so rules like "preserve
+      placeholders" can't be asked for — they're enforced structurally by controlling what the model
+      sees, then verifying the output. If a placeholder doesn't survive, the row is parked rather
+      than shipped.
+    </p>
+    <p>
+      The result: 500 rows translated with 8 API calls, zero failures.
+    </p>
+    <div class="tip"><b>Why this works:</b> it names the problem, the key constraint, one hard technical decision, and a concrete number — in that order.</div>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q2</span>
+  <div class="q">Why doesn't the Translate button translate synchronously?</div>
+  <div class="a">
+    <p>
+      Volume. An episode can hold thousands of rows, and each Sarvam call takes a few hundred
+      milliseconds. Even with concurrency that far exceeds any HTTP or serverless timeout.
+    </p>
+    <p>Asynchronous processing also gives three things synchronous cannot:</p>
+    <ul>
+      <li><strong>Resumability</strong> — a crash mid-job loses one slice, not the job.</li>
+      <li><strong>Horizontal scale</strong> — add workers without touching the request path.</li>
+      <li><strong>Progress</strong> — the user sees movement instead of a spinner.</li>
+    </ul>
+    <p>The endpoint returns <code>202 Accepted</code> with a job id, which is the honest status code for accepted-but-not-done.</p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q3</span>
+  <div class="q">Why a Postgres queue rather than Redis, SQS or RabbitMQ?</div>
+  <div class="a">
+    <p>Three reasons, in order of weight:</p>
+    <ol>
+      <li><strong>Transactional consistency.</strong> Job state and translated rows live in one database, so settling a slice and updating progress is one atomic transaction. With an external broker, a crash between "job acknowledged" and "rows written" leaves the two permanently disagreeing.</li>
+      <li><strong><code>SKIP LOCKED</code> is genuinely sufficient.</strong> It gives safe multi-consumer claiming with no polling storms and no lost messages.</li>
+      <li><strong>Operational cost.</strong> No second system to deploy, secure, monitor and back up.</li>
+    </ol>
+    <p>
+      I'd move to a dedicated broker at very high throughput — tens of thousands of jobs per second,
+      where queue traffic starts competing with application queries for database resources — or if I
+      needed fan-out to multiple independent consumer groups. Neither applies here.
+    </p>
+    <div class="tip"><b>Strong close:</b> naming the condition under which you'd change your mind shows judgement rather than dogma.</div>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q4</span>
+  <div class="q">How would you add a second translation provider?</div>
+  <div class="a">
+    <p>
+      One new class satisfying <code>TranslationProvider</code> — four members: <code>name</code>,
+      <code>model</code>, <code>maxInputChars</code>, and the <code>supports()</code> /
+      <code>translate()</code> pair — plus one line in the registry. No caller changes.
+    </p>
+    <p>
+      Registration order is preference order, so Sarvam stays first and keeps Indic pairs going to
+      the specialist model; anything it doesn't support falls through. <code>maxInputChars</code>
+      means chunking adapts automatically, and <code>supports()</code> lets the router reject an
+      unsupported pair up front with a clear error rather than discovering it through a 400 deep
+      inside a batch.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q5</span>
+  <div class="q">Why is the translation service framework-free?</div>
+  <div class="a">
+    <p>
+      Nothing under <code>services/translation/</code> imports Next.js, and the database is reached
+      through a <code>MemoryPort</code> interface rather than a Supabase client.
+    </p>
+    <p>
+      The practical payoff is testing: the entire pipeline runs against an in-memory fake with no
+      database and no network, which is why 44 tests execute in under a second. The secondary
+      payoff is that the domain logic would survive a framework change untouched. The worker already
+      proves the point — it runs outside Next entirely and imports the same modules.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q6</span>
+  <div class="q">Where does business logic live — application or database?</div>
+  <div class="a">
+    <p>Split deliberately:</p>
+    <ul>
+      <li><strong>Database:</strong> anything that must hold regardless of which code path runs — org scoping (RLS), "one live job per episode/language" (partial unique index), "machine never overwrites human" (guarded upsert), atomic claim and roll-up.</li>
+      <li><strong>Application:</strong> anything needing rich logic or external calls — text protection, chunking, provider routing, retry policy, batching.</li>
+    </ul>
+    <p>
+      The test is: <em>could a future code path violate this?</em> If yes, it belongs in the database
+      as a constraint. Invariants in application code are conventions; invariants in the database are
+      guarantees.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q7</span>
+  <div class="q">How does the system handle a worker crashing mid-job?</div>
+  <div class="a">
+    <p>
+      Claimed items sit in <code>running</code> with a <code>locked_at</code> timestamp. On the next
+      tick, <code>requeue_stuck_job_items()</code> finds anything locked more than ten minutes and
+      either returns it to <code>queued</code> or — if it has burned its attempt budget — parks it as
+      <code>failed</code> with "abandoned by worker".
+    </p>
+    <p>
+      So a crash costs at most one slice and at most ten minutes. Other workers keep draining the
+      rest of the job the whole time, because claiming is per-slice, not per-job.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q8</span>
+  <div class="q">What was the hardest technical decision?</div>
+  <div class="a">
+    <p>
+      Failing loudly on placeholder loss. When a sentinel doesn't survive translation the pipeline
+      retries with a different shape, and if that fails it throws — the row is parked instead of
+      shipped.
+    </p>
+    <p>
+      That's deliberately choosing lower completion over higher risk. The alternative — return
+      slightly-wrong text — is worse at this scale: a flagged row is visible and fixable in the
+      review queue, while silent corruption spread across a million rows might not surface until
+      it's in a dubbing studio. Correctness beat completeness because the failure was
+      <em>silent</em> and the blast radius was large.
+    </p>
+    <div class="tip"><b>Pattern:</b> name the trade-off, name the alternative, then justify with the cost of being wrong.</div>
+  </div>
+</div>
+
+<!-- ==================================================================== -->
+<h2><span class="num">14</span>Interview Questions — Database</h2>
+<p class="lede">Questions 9–20. The deepest technical section; expect the most probing here.</p>
+
+<div class="cat"><div class="cn">Category B</div><div class="ct">PostgreSQL, indexing &amp; data modelling</div></div>
+
+<div class="qa"><span class="qn">Q9</span>
+  <div class="q">Explain <code>FOR UPDATE SKIP LOCKED</code>.</div>
+  <div class="a">
+    <p>
+      <code>FOR UPDATE</code> takes a row-level write lock. Normally a second transaction wanting the
+      same row <em>blocks</em> until the first commits. <code>SKIP LOCKED</code> changes that: skip
+      any locked row and move to the next unlocked one.
+    </p>
+    <p>
+      That's exactly what a queue needs. Ten workers each ask for 100 queued items and each gets a
+      disjoint 100 with no waiting. Without it they'd all target the same rows by <code>id</code>
+      order and serialise into a single-consumer queue with extra steps.
+    </p>
+    <p>
+      The claim is a CTE: select candidate ids with <code>SKIP LOCKED</code>, update those to
+      <code>running</code> while incrementing <code>attempts</code>, and return them joined to the
+      script rows — all in one atomic statement.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q10</span>
+  <div class="q">Why <code>bigint</code> for script_rows but <code>uuid</code> for books?</div>
+  <div class="a">
+    <p>
+      Access pattern and volume. <code>script_rows</code> is the million-row table, always read in
+      <code>row_index</code> order within an episode, and referenced by a foreign key from every
+      translation row. A bigint is 8 bytes and sequential; a uuid is 16 and random.
+    </p>
+    <p>
+      Sequential keys mean inserts append to the right edge of the B-tree instead of scattering
+      writes across it, which keeps the index dense and cache-friendly. Doubling the key width also
+      doubles it in every index and every referencing foreign key.
+    </p>
+    <p>
+      Books are few, created rarely, and their ids appear in URLs — where uuids are preferable
+      because they don't leak how many books exist or allow enumeration.
+    </p>
+    <div class="tip"><b>Bonus:</b> if you want both, UUIDv7 is time-ordered and gives sequential locality with uuid opacity.</div>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q11</span>
+  <div class="q">Why denormalise <code>org_id</code> when you could join?</div>
+  <div class="a">
+    <p>
+      Because RLS runs on <em>every row of every query</em>. Deriving the org through
+      <code>script_rows → episodes → books</code> would make each policy check a two-level join,
+      multiplied by every row scanned.
+    </p>
+    <p>
+      Storing <code>org_id</code> directly makes the predicate a single indexed lookup. The cost is
+      a redundant uuid per row and the obligation to keep it consistent — handled by setting it at
+      insert and cascading deletes from the organisation. That's a good trade when the alternative
+      is paying a join on the hottest path in the system.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q12</span>
+  <div class="q">What is a partial index and why use one here?</div>
+  <div class="a">
+    <p>
+      An index with a <code>WHERE</code> clause — it only contains rows matching that predicate.
+    </p>
+    <p>
+      The claim query only ever looks at <code>status = 'queued'</code>. Once a million items have
+      been processed, a full index would carry a million mostly-irrelevant entries; the partial index
+      holds only what's actually queued, staying small and cache-resident no matter how much history
+      accumulates.
+    </p>
+    <p>
+      The other one is a correctness constraint: a <em>unique</em> partial index on
+      <code>(episode_id, target_language) where status in ('queued','running')</code> makes duplicate
+      live jobs impossible at the database level, even under a race.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q13</span>
+  <div class="q">How does search stay fast on a million rows?</div>
+  <div class="a">
+    <p>
+      A GIN index using <code>pg_trgm</code>. Trigram indexing breaks text into three-character
+      sequences, which lets Postgres serve <code>ILIKE '%query%'</code> from the index.
+    </p>
+    <p>
+      A B-tree can't help with a leading wildcard — it can only seek a known prefix. Full-text search
+      is the other option, but <code>tsvector</code> does stemmed whole-word matching; it wouldn't
+      find a partial character name or a fragment mid-word, which is what reviewers actually search
+      for.
+    </p>
+    <p>The trade-off is a larger index and slower writes — acceptable for content written once and searched constantly.</p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q14</span>
+  <div class="q">Explain keyset pagination and why you chose it.</div>
+  <div class="a">
+    <p>
+      Instead of <code>OFFSET 900000 LIMIT 100</code>, the query says <code>WHERE id &gt; 900000
+      ORDER BY id LIMIT 100</code>.
+    </p>
+    <p>
+      <code>OFFSET</code> must read and discard every skipped row — page 9,000 reads 900,100 rows to
+      return 100, so it degrades linearly with depth. Keyset seeks directly into the index and reads
+      exactly 100 regardless of depth.
+    </p>
+    <p>
+      It's also <strong>stable under concurrent writes</strong>: with OFFSET, a row inserted earlier
+      in the ordering shifts everything, so a user paging forward can see a row twice or miss one
+      entirely. Keyset is anchored to a value, not a position.
+    </p>
+    <p>The cost is losing random access to page N — acceptable, since nobody jumps to page 9,000 of a script.</p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q15</span>
+  <div class="q">How does RLS work here, and how did you avoid infinite recursion?</div>
+  <div class="a">
+    <p>
+      Every table has policies calling <code>is_org_member(org_id)</code> or
+      <code>has_org_role(org_id, roles[])</code>, which check the current user via
+      <code>auth.uid()</code> against <code>org_members</code>.
+    </p>
+    <p>
+      The recursion problem: the policy <em>on</em> <code>org_members</code> needs to query
+      <code>org_members</code>, which triggers the policy again, forever. The fix is
+      <code>SECURITY DEFINER</code> — the helper runs as its owner and bypasses RLS for that lookup.
+    </p>
+    <p>
+      Critically, <code>SECURITY DEFINER</code> functions must set <code>search_path = public</code>.
+      Otherwise a caller could create a table shadowing <code>org_members</code> in a schema earlier
+      in their path and hijack the elevated privilege. That's a well-known Postgres privilege
+      escalation vector.
+    </p>
+    <div class="tip"><b>This answer scores highly:</b> naming the search_path attack shows security depth beyond "I enabled RLS."</div>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q16</span>
+  <div class="q">How do you write 100 translation results efficiently?</div>
+  <div class="a">
+    <p>
+      One statement: <code>UPDATE … FROM jsonb_to_recordset(p_results)</code>. The worker sends the
+      whole slice as a JSON array, Postgres expands it into a relation, and the update joins against
+      it.
+    </p>
+    <p>
+      A hundred individual updates would be a hundred round trips plus a hundred transactions. At a
+      million rows that's the difference between minutes and hours.
+    </p>
+    <p>
+      The same statement carries a guard — <code>and t.status in ('pending','failed','machine')</code>
+      — so a reviewer who edited a row while the job was in flight is never overwritten.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q17</span>
+  <div class="q">Why compute the memory hash in the app rather than a generated column?</div>
+  <div class="a">
+    <p>
+      A generated column was the first instinct, and it would guarantee the hash is always present.
+      But it would mean the normalisation logic existing <em>twice</em> — once in TypeScript for
+      lookups, once in SQL for storage.
+    </p>
+    <p>
+      Those two would drift. The moment they disagree on, say, Unicode NFC or whitespace collapsing,
+      the cache silently splits in two: lookups miss, entries duplicate, and nothing errors. Since a
+      cache miss just costs money rather than breaking anything, the failure would be invisible for
+      a long time.
+    </p>
+    <p>One implementation, one source of truth, documented in the migration so nobody writes that table by raw SQL.</p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q18</span>
+  <div class="q">How do you guarantee a machine translation never overwrites a human correction?</div>
+  <div class="a">
+    <p>Two independent guards, both in SQL:</p>
+    <ul>
+      <li><strong>Translation memory:</strong> the upsert's <code>DO UPDATE</code> carries
+        <code>WHERE translation_memory.origin = 'machine' OR excluded.origin = 'human'</code>.</li>
+      <li><strong>Translation rows:</strong> the bulk writeback only touches
+        <code>status IN ('pending','failed','machine')</code> — <code>edited</code> and
+        <code>approved</code> are excluded.</li>
+    </ul>
+    <p>
+      Both are in the database, not the application, so no code path — including one written next
+      year by someone else — can violate them. The smoke test asserts both explicitly, because a
+      guarantee that isn't tested is a hope.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q19</span>
+  <div class="q">What is <code>REPLICA IDENTITY FULL</code> and why did you need it?</div>
+  <div class="a">
+    <p>
+      It controls how much of the old row Postgres writes to the WAL on <code>UPDATE</code> and
+      <code>DELETE</code>. The default writes only the primary key.
+    </p>
+    <p>
+      That broke Realtime here for two reasons: the subscription filters on <code>episode_id</code>,
+      which isn't the primary key and so isn't in the WAL record; and because the table is
+      RLS-protected, Realtime needs the full row to evaluate whether each subscriber may see it.
+    </p>
+    <p>
+      The symptom was nasty — no error anywhere, just a progress bar frozen at 0% while the job
+      completed normally. Setting <code>REPLICA IDENTITY FULL</code> writes the whole old row. The
+      cost is a larger WAL record per update, negligible here because the table is updated once per
+      slice, not per row.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q20</span>
+  <div class="q">How would you scale past a million rows?</div>
+  <div class="a">
+    <p>
+      The current design should hold comfortably at a million; the indexes and access patterns are
+      already sized for it. The next structural step, around 50M, is <strong>partitioning</strong>
+      <code>script_rows</code> and <code>translations</code> by <code>book_id</code>.
+    </p>
+    <p>
+      That works cleanly because queries already filter by episode or book, so partition pruning
+      applies immediately, and dropping a finished show becomes a partition drop instead of a mass
+      delete.
+    </p>
+    <p>
+      Before that I'd add read replicas for the review UI — reviewers are read-heavy and the worker
+      is write-heavy, so they separate naturally. I wouldn't do either preemptively; both add
+      operational complexity that isn't yet earned.
+    </p>
+  </div>
+</div>
+
+<!-- ==================================================================== -->
+<h2><span class="num">15</span>Interview Questions — Queue &amp; Concurrency</h2>
+<p class="lede">Questions 21–28.</p>
+
+<div class="cat"><div class="cn">Category C</div><div class="ct">Background jobs, concurrency &amp; reliability</div></div>
+
+<div class="qa"><span class="qn">Q21</span>
+  <div class="q">What happens if two users click Translate simultaneously?</div>
+  <div class="a">
+    <p>
+      One job. <code>enqueue_translation_job()</code> first looks for a live job for that
+      (episode, language) and returns its id if found. If both requests pass that check
+      simultaneously, the <strong>partial unique index</strong> on
+      <code>(episode_id, target_language) where status in ('queued','running')</code> makes the second
+      insert fail.
+    </p>
+    <p>
+      The application check handles the common case efficiently; the index handles the race
+      correctly. Relying on the check alone would be a TOCTOU bug.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q22</span>
+  <div class="q">How do you prevent double-charging for the same translation?</div>
+  <div class="a">
+    <p>Four mechanisms compounding:</p>
+    <ol>
+      <li>Only rows that need work are enqueued — already-translated rows are skipped entirely.</li>
+      <li>Identical rows within a slice collapse to one call before anything is sent.</li>
+      <li>Translation memory is consulted before any API call.</li>
+      <li>Idempotent enqueue means a double click can't create a second job.</li>
+    </ol>
+    <p>Measured: 500 rows, 8 calls.</p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q23</span>
+  <div class="q">Why bounded concurrency instead of <code>Promise.all</code>?</div>
+  <div class="a">
+    <p>
+      <code>Promise.all</code> over a 100-row slice fires 100 simultaneous HTTP requests. That
+      immediately trips rate limits, and rate-limit responses cost real money in retries and latency
+      while accomplishing nothing.
+    </p>
+    <p>
+      <code>mapWithConcurrency</code> keeps a fixed number in flight — default 8, configurable — by
+      running N workers over a shared cursor. Results stay in input order regardless of completion
+      order. The right number is whatever the provider's rate limit allows, which is why it's an
+      environment variable rather than a constant.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q24</span>
+  <div class="q">Explain your retry strategy.</div>
+  <div class="a">
+    <p>Retryability is a property of the error, not the operation:</p>
+    <ul>
+      <li><strong>429, 5xx, timeouts, network errors</strong> — transient. Retried with exponential backoff and full jitter, honouring <code>Retry-After</code> when the server sends it.</li>
+      <li><strong>4xx</strong> — the request is malformed and will stay malformed. Retrying burns quota for a guaranteed failure.</li>
+    </ul>
+    <p>
+      That's why <code>TranslationError</code> carries a <code>retryable</code> flag — the decision is
+      made where the error is understood, not guessed at by the caller. Above that sits a second
+      layer: a row that keeps failing gets requeued up to <code>maxAttempts</code>, then parked as
+      <code>failed</code> for a human.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q25</span>
+  <div class="q">Why full jitter rather than plain exponential backoff?</div>
+  <div class="a">
+    <p>
+      With plain backoff every client that failed at the same moment waits the same interval and
+      retries in the same instant — the thundering herd re-forms at each attempt.
+    </p>
+    <p>
+      Full jitter picks uniformly between 0 and the ceiling, spreading retries across the window.
+      With 8 concurrent workers all hitting one rate limit simultaneously, this is the difference
+      between a smooth recovery and eight synchronised waves.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q26</span>
+  <div class="q">How does progress reach the browser?</div>
+  <div class="a">
+    <p>
+      Supabase Realtime over <code>postgres_changes</code>, filtered to the episode. The worker calls
+      <code>mark_job_items()</code>, which settles the slice and recomputes counters in the same
+      transaction, producing exactly one <code>UPDATE</code> on <code>translation_jobs</code>.
+      Realtime broadcasts that to every subscriber.
+    </p>
+    <p>
+      One broadcast per slice rather than per row — 5 events for a 500-row job instead of 500 — and
+      because counters are recomputed transactionally, every event carries a consistent snapshot
+      rather than a torn one. Polling would have cost more than the translation.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q27</span>
+  <div class="q">Can you run multiple workers? What breaks?</div>
+  <div class="a">
+    <p>
+      Yes, and nothing breaks. <code>SKIP LOCKED</code> means each worker takes a disjoint slice.
+      Nothing else in the pipeline is contended: memory lookups are reads, writebacks are keyed by
+      row, and counter roll-ups are recomputed from the items table rather than incremented, so
+      they're order-independent.
+    </p>
+    <p>
+      The real limit is the Sarvam rate limit, not the database. Total concurrency is
+      workers × <code>TRANSLATION_CONCURRENCY</code>, so both are configurable.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q28</span>
+  <div class="q">Why recompute counters instead of incrementing them?</div>
+  <div class="a">
+    <p>
+      Incrementing (<code>completed_rows = completed_rows + N</code>) is order-dependent and drifts.
+      A retried slice, a double-settle after a crash, or two workers finishing simultaneously can all
+      produce a wrong total that never self-corrects.
+    </p>
+    <p>
+      Recomputing with aggregate <code>COUNT(*) FILTER (WHERE …)</code> over the items table is
+      <strong>idempotent</strong>: it derives truth from the queue's actual state, so running it
+      twice gives the same answer and any drift heals on the next slice. Slightly more expensive,
+      and correct by construction.
+    </p>
+  </div>
+</div>
+
+<!-- ==================================================================== -->
+<h2><span class="num">16</span>Interview Questions — API Integration &amp; Resilience</h2>
+<p class="lede">Questions 29–36.</p>
+
+<div class="cat"><div class="cn">Category D</div><div class="ct">External APIs, failure handling &amp; cost</div></div>
+
+<div class="qa"><span class="qn">Q29</span>
+  <div class="q">How do you handle an API with no batch endpoint?</div>
+  <div class="a">
+    <p>
+      Sarvam's <code>/translate</code> takes one <code>input</code> per call — there's no multi-input
+      form. So throughput comes from <em>reducing calls</em> and <em>parallelising what remains</em>,
+      not from packing payloads.
+    </p>
+    <p>
+      Reduce: skip untranslatable lines, dedupe identical rows, hit translation memory. Parallelise:
+      bounded concurrency over whatever survives. That's how 500 rows became 8 calls — the batching
+      is logical, not protocol-level.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q30</span>
+  <div class="q">How do you handle input longer than the API limit?</div>
+  <div class="a">
+    <p>
+      <code>chunkText()</code> splits with a preference cascade: sentence boundaries first — including
+      the Devanagari danda <code>।</code> and double danda <code>॥</code>, not just Latin
+      punctuation — then clause boundaries, then whitespace, and only as a last resort mid-word.
+    </p>
+    <p>
+      The limit comes from <code>provider.maxInputChars</code>, so it adapts per provider and per
+      model (2,000 for <code>sarvam-translate:v1</code>, 1,000 for <code>mayura:v1</code>) rather than
+      being hardcoded. Chunks are rejoined at sentence boundaries, so a single space reassembles them
+      cleanly even if the model trims its own output.
+    </p>
+    <div class="tip"><b>Detail worth mentioning:</b> handling the danda shows you thought about the actual languages, not just ASCII.</div>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q31</span>
+  <div class="q">How do you test code that calls a paid external API?</div>
+  <div class="a">
+    <p>Three layers, because each catches what the others can't:</p>
+    <ul>
+      <li><strong>Unit tests</strong> with a fake provider — fast, free, deterministic. Covers pipeline logic and failure isolation.</li>
+      <li><strong>Injected <code>fetch</code></strong> — the Sarvam provider accepts a <code>fetchImpl</code>, so request shape, retry behaviour, 429 handling and error mapping are all tested against stubbed HTTP responses with no network.</li>
+      <li><strong>A live check</strong> (<code>npm run check:sarvam</code>) — a handful of representative lines against the real API, run deliberately rather than in CI.</li>
+    </ul>
+    <p>
+      That third layer earned its place: it caught the stage-cue bug that both other layers passed,
+      because the fake provider echoed text back unchanged and the structural mistake was invisible.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q32</span>
+  <div class="q">The API is non-deterministic. How do you build reliably on it?</div>
+  <div class="a">
+    <p>
+      Assume any single call may misbehave, and verify rather than trust. Placeholders are checked on
+      return; if a sentinel is missing the line is retried with a different sentinel shape, and only
+      after both fail is the row parked.
+    </p>
+    <p>
+      I actually measured this: the same input occasionally lost a <code>#0#</code> that survived a
+      moment earlier. Rather than assume the sentinel was bad, I probed eight shapes across four
+      languages and confirmed <code>#0#</code> is fine — the variance was model non-determinism. So
+      the two-shape retry stays, converting a random failure into a second attempt.
+    </p>
+    <div class="tip"><b>Strong signal:</b> "I measured it" beats "I assumed it" in every interview.</div>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q33</span>
+  <div class="q">How do you keep API keys safe?</div>
+  <div class="a">
+    <p>
+      Server-only, always. Never prefixed <code>NEXT_PUBLIC_</code>, since that prefix is what tells
+      Next.js to inline a value into the client bundle. Validated by Zod at boot so a missing key
+      fails immediately with a clear message rather than at the first translation.
+    </p>
+    <p>
+      Modules holding secrets throw at import time if <code>window</code> is defined. I used a runtime
+      guard rather than the <code>server-only</code> package because the standalone worker runs
+      outside Next and has to import the same modules — <code>server-only</code> relies on a bundler
+      condition that isn't present there.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q34</span>
+  <div class="q">A user says translations are slow. How do you debug it?</div>
+  <div class="a">
+    <p>Work down the stack, measuring at each layer rather than guessing:</p>
+    <ol>
+      <li><strong>Is the worker running?</strong> The single most common cause — a queued job with no consumer looks identical to a slow one.</li>
+      <li><strong>Job counters</strong> — is <code>completed_rows</code> moving? That separates "stuck" from "slow".</li>
+      <li><strong>Cache hit rate</strong> — <code>tm_hits</code> versus total. A cold cache on unique content is expected to be slow.</li>
+      <li><strong>Provider latency</strong> — the provider records <code>latencyMs</code> per call; rising latency or 429s means back off concurrency.</li>
+      <li><strong>Database</strong> — <code>EXPLAIN ANALYZE</code> the claim query; check the partial index is being used.</li>
+    </ol>
+    <p>The instrumentation exists for exactly this: every slice logs done, failed, requeued, from-memory and API calls.</p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q35</span>
+  <div class="q">How would you add cost tracking?</div>
+  <div class="a">
+    <p>
+      Most of it is already there: <code>translation_memory.use_count</code> counts calls avoided, and
+      each job records <code>tm_hits</code>. The <code>/memory</code> page surfaces both.
+    </p>
+    <p>
+      To complete it I'd log per-call character counts and latency into a <code>translation_usage</code>
+      table keyed by org and day, then compute spend against the provider's rate. That enables per-org
+      budgets and quota alerts — the natural next step for a multi-tenant product where one team's
+      re-translation shouldn't exhaust everyone's quota.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q36</span>
+  <div class="q">What if Sarvam goes down entirely?</div>
+  <div class="a">
+    <p>
+      Today: 5xx responses are retried with backoff; rows exhausting their attempt budget park as
+      <code>failed</code> and stay visible in the review queue. Nothing is lost — the queue holds and
+      re-running picks up exactly the failed rows.
+    </p>
+    <p>
+      What I'd add: a <strong>circuit breaker</strong>. After N consecutive failures, stop calling for
+      a cooldown instead of grinding every row through its full retry budget against a dead service.
+      The provider abstraction also makes failover viable — register a fallback and have the router
+      try it when the primary is open-circuit.
+    </p>
+  </div>
+</div>
+
+<!-- ==================================================================== -->
+<h2><span class="num">17</span>Interview Questions — Domain &amp; Translation Quality</h2>
+<p class="lede">Questions 37–43. This is where the project stops looking generic.</p>
+
+<div class="cat"><div class="cn">Category E</div><div class="ct">The localisation problem itself</div></div>
+
+<div class="qa"><span class="qn">Q37</span>
+  <div class="q">How do you stop the model translating character names?</div>
+  <div class="a">
+    <p>
+      The name never reaches the model. Two paths: a dedicated <code>character_name</code> column,
+      which is simply never sent; and inline prefixes like <code>Raju: Namaste sabhi ko.</code>, where
+      <code>splitLine()</code> separates <code>marker | speaker | body | trailing</code> and only the
+      body is translated. The speaker is reattached verbatim afterwards.
+    </p>
+    <p>
+      Speaker detection is deliberately conservative — max four words, no sentence-ending punctuation,
+      no brackets — so ordinary prose like <em>"He said the only thing that mattered: nothing."</em>
+      isn't mistaken for dialogue. The episode's known character names are also passed in, so matching
+      is exact rather than heuristic where possible.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q38</span>
+  <div class="q">How do you protect placeholders through translation?</div>
+  <div class="a">
+    <p>Mask, translate, verify, restore.</p>
+    <p>
+      Nine regex patterns cover <code>{{x}}</code>, <code>{x}</code>, <code>[[x]]</code>,
+      <code>[SFX: …]</code>, HTML tags, <code>%s</code>, <code>%1$s</code>, <code>${x}</code> and
+      <code>$SHOUTY_VAR</code>, ordered longest-construct-first so <code>{{name}}</code> matches
+      before <code>{name}</code>. Each becomes a sentinel; the model sees only sentinels.
+    </p>
+    <p>
+      The verification step is what makes it trustworthy rather than hopeful: if any sentinel is
+      missing on return, retry with a different shape, then fail the row rather than restore into
+      text that has lost its markers.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q39</span>
+  <div class="q">Why not just prompt an LLM with the rules?</div>
+  <div class="a">
+    <p>
+      Two reasons. First, Sarvam's translate endpoint has no system prompt — there's literally no
+      channel to send instructions through. The constraint forced the structural approach.
+    </p>
+    <p>
+      Second, it's better anyway. A prompt is a <em>request</em> the model may ignore, especially on
+      long or unusual inputs; masking is a <em>guarantee</em>, because the protected content is
+      physically absent from what the model sees. If I added an LLM provider I'd use prompting as
+      well — but I'd keep the structural layer underneath, since it's the one that can be verified.
+    </p>
+    <div class="tip"><b>This is a standout answer</b> — it reframes a limitation as a design insight.</div>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q40</span>
+  <div class="q">Why only 23 languages when the spec asked for Spanish, Japanese and others?</div>
+  <div class="a">
+    <p>
+      Because Sarvam's translate endpoint covers English and the 22 scheduled Indian languages and
+      nothing else. I verified that against the API documentation before writing code, and raised it
+      rather than discovering it in production.
+    </p>
+    <p>
+      Listing languages that would fail at runtime would be worse than being honest: the supported set
+      lives in one file, and the UI only offers what genuinely works. The provider abstraction exists
+      precisely so a second provider can widen it — that's a one-file change.
+    </p>
+    <div class="tip"><b>Shows:</b> you validate requirements against reality and communicate constraints early — a professional trait interviewers actively look for.</div>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q41</span>
+  <div class="q">How does the review loop improve quality over time?</div>
+  <div class="a">
+    <p>
+      A reviewer edits a translation; <code>save_translation_correction()</code> updates the row to
+      <code>edited</code> or <code>approved</code> <em>and</em> writes the corrected wording into
+      translation memory with <code>origin = 'human'</code> — in one transaction.
+    </p>
+    <p>
+      The next time that source line appears anywhere in the catalogue, the corrected version is
+      reused instead of re-asking the model. Because the database blocks machine output from
+      overwriting human entries, the improvement is permanent. Review effort compounds instead of
+      evaporating — which is the difference between a translation tool and a translation
+      <em>system</em>.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q42</span>
+  <div class="q">How do you handle right-to-left languages?</div>
+  <div class="a">
+    <p>
+      Urdu, Kashmiri and Sindhi use Perso-Arabic script. The language table records the script, and
+      <code>isRtl()</code> drives a <code>dir="rtl"</code> attribute on both the display cell and the
+      edit textarea, so the browser handles bidirectional layout and cursor behaviour natively.
+    </p>
+    <p>
+      Font stacks also include Noto families for Devanagari, Tamil and Bengali, because default system
+      fonts often render Indic scripts with broken conjuncts.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q43</span>
+  <div class="q">What quality checks would you add next?</div>
+  <div class="a">
+    <p>Automated signals that flag suspicious output for human attention without blocking the pipeline:</p>
+    <ul>
+      <li><strong>Length ratio</strong> — output far longer or shorter than expected for the pair usually means truncation or hallucination.</li>
+      <li><strong>Script detection</strong> — untranslated Latin text sitting in a Tamil target means the model passed it through.</li>
+      <li><strong>Glossary compliance</strong> — once a term base exists, verify enforced terms actually appear.</li>
+      <li><strong>Back-translation sampling</strong> — translate a random sample back and compare, as a cheap regression signal when changing models.</li>
+    </ul>
+    <p>These are warnings, not gates — the existing hard failure is reserved for placeholder loss, where the output is definitively broken.</p>
+  </div>
+</div>
+
+<!-- ==================================================================== -->
+<h2><span class="num">18</span>Interview Questions — Frontend &amp; Next.js</h2>
+<p class="lede">Questions 44–50.</p>
+
+<div class="cat"><div class="cn">Category F</div><div class="ct">React, Next.js App Router &amp; UX</div></div>
+
+<div class="qa"><span class="qn">Q44</span>
+  <div class="q">Server Components vs Client Components — how did you decide?</div>
+  <div class="a">
+    <p>
+      Default to server; opt into client only where interactivity demands it. Pages are Server
+      Components that query Supabase directly — no API layer, no loading state, no data serialisation
+      beyond what React already does.
+    </p>
+    <p>
+      Client Components are the four that need browser state: the translate panel (Realtime
+      subscription, fetch), the review table (inline editing), the search bar, and the forms. Each is
+      a leaf, so the interactive JavaScript shipped stays small.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q45</span>
+  <div class="q">Why does <code>/api/translate</code> exist when Server Actions could do it?</div>
+  <div class="a">
+    <p>
+      Both exist, deliberately. Server Actions handle form submissions where a full round trip and
+      revalidation are natural — creating a book, importing a script.
+    </p>
+    <p>
+      The translate flow is different: the client needs the job id back to subscribe to Realtime, and
+      it shouldn't navigate or re-render the page. A Route Handler returning <code>202</code> with the
+      job is the honest shape for that. Route Handlers are also callable by things that aren't the
+      app — which matters for the worker tick endpoint.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q46</span>
+  <div class="q">How does the Realtime subscription work, and how do you avoid leaks?</div>
+  <div class="a">
+    <p>
+      A <code>useEffect</code> opens a channel subscribed to <code>postgres_changes</code> on
+      <code>translation_jobs</code>, filtered server-side by <code>episode_id</code> so the socket
+      stays quiet in a workspace running many jobs.
+    </p>
+    <p>
+      The effect returns a cleanup that calls <code>removeChannel</code>, and its dependency array is
+      episode, language and router — so switching language tears down the old channel and opens a new
+      one. The browser client itself is memoised at module level, because each instance would open its
+      own socket.
+    </p>
+    <p>When the job reaches a terminal state the component also triggers <code>router.refresh()</code> to pull the freshly translated rows in.</p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q47</span>
+  <div class="q">How do you handle optimistic updates in the review editor?</div>
+  <div class="a">
+    <p>
+      Editing keeps a local override map keyed by translation id. On save, the PATCH fires and on
+      success the override is applied immediately with the new status — so the row updates without a
+      full page refetch, which matters when you're working down a list of a hundred corrections.
+    </p>
+    <p>
+      On failure the error is stored per row and shown inline, leaving the edit in place so the work
+      isn't lost. I deliberately didn't apply the change before the request resolved: a correction
+      that silently failed to save would be worse than a brief wait.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q48</span>
+  <div class="q">How does authentication work across server and client?</div>
+  <div class="a">
+    <p>
+      Supabase Auth with cookie-based sessions via <code>@supabase/ssr</code>. Middleware refreshes
+      the session on every request and gates unauthenticated users to <code>/login</code>.
+    </p>
+    <p>
+      The middleware is load-bearing, not decorative: <strong>Server Components cannot set cookies</strong>,
+      so without it the refreshed token would have nowhere to go and sessions would silently expire
+      mid-visit. Three clients exist for three contexts — browser, server-with-session, and
+      service-role for the worker.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q49</span>
+  <div class="q">A user reports "translation is not working." How do you respond?</div>
+  <div class="a">
+    <p>
+      This actually happened. I checked the data before touching code: queried the jobs table, found
+      the job had <em>completed</em> — 500/500, zero failures — and confirmed the translated text was
+      present and correct. The backend was healthy.
+    </p>
+    <p>
+      Then I reproduced what the user's page would render, and found it: the episode defaults to
+      English for a Hindi source book, English was already fully translated, so
+      <code>pendingRows</code> was 0 and my button rendered greyed out as "Translate 0 rows". A
+      finished episode looked exactly like a broken one.
+    </p>
+    <p>
+      Fixed by making the button state legible — "Re-translate 500 rows" plus an "All 500 rows
+      translated" badge. The lesson: "not working" is a symptom, and reproducing against real data
+      turned a suspected pipeline failure into a five-minute UI fix.
+    </p>
+    <div class="tip"><b>Use this one.</b> It demonstrates debugging discipline and owning a UX mistake — both rare and valued.</div>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q50</span>
+  <div class="q">How do you render a hundred-thousand-row episode?</div>
+  <div class="a">
+    <p>
+      You don't. The page is keyset-paginated at 100 rows with a server-side search across source
+      text, character names and translations — so a reviewer finds the rows they need instead of
+      scrolling to them.
+    </p>
+    <p>
+      If a continuous view were required I'd add windowing with <code>react-window</code> so DOM nodes
+      stay proportional to the viewport, not the dataset. I'd avoid that until asked, though —
+      virtualisation complicates find-in-page, accessibility and text selection, and search solves the
+      real user need more simply.
+    </p>
+  </div>
+</div>
+
+<!-- ==================================================================== -->
+<h2><span class="num">19</span>Interview Questions — Security</h2>
+<p class="lede">Questions 51–56.</p>
+
+<div class="cat"><div class="cn">Category G</div><div class="ct">Security &amp; multi-tenancy</div></div>
+
+<div class="qa"><span class="qn">Q51</span>
+  <div class="q">How do you guarantee tenant isolation?</div>
+  <div class="a">
+    <p>
+      RLS on all ten tables, with policies checking org membership through
+      <code>is_org_member()</code> / <code>has_org_role()</code>. Authorisation lives in the database,
+      not in application code.
+    </p>
+    <p>
+      That's the important part: even if an API route forgot a <code>WHERE org_id = …</code>, the
+      database returns nothing. Application-layer authorisation is one forgotten filter away from a
+      cross-tenant leak; RLS makes the safe path the default. The smoke test asserts it negatively —
+      a viewer attempting to start a job gets <code>insufficient_privilege</code>.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q52</span>
+  <div class="q">The worker bypasses RLS. Isn't that dangerous?</div>
+  <div class="a">
+    <p>
+      It's a real risk, managed deliberately. The worker has no user session — it processes rows on
+      behalf of many tenants — so it uses the service role.
+    </p>
+    <p>Containment:</p>
+    <ul>
+      <li>Exactly one module creates that client, documented as worker-only.</li>
+      <li>It's never imported into a request path; user-facing code uses the session client.</li>
+      <li>The RPCs it calls still scope by <code>org_id</code> explicitly.</li>
+      <li>The key is server-only, guarded against browser import.</li>
+    </ul>
+    <p>The rule I'd state in review: never reach for the service role to "fix" a permissions problem in a user-facing path — that path should be using the session client.</p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q53</span>
+  <div class="q">Why is <code>set search_path</code> on <code>SECURITY DEFINER</code> functions non-negotiable?</div>
+  <div class="a">
+    <p>
+      A <code>SECURITY DEFINER</code> function runs with its owner's privileges. Without a pinned
+      <code>search_path</code>, it resolves unqualified table names using the <em>caller's</em> path.
+    </p>
+    <p>
+      An attacker who can create objects could define their own <code>org_members</code> in a schema
+      earlier in that path, and the elevated function would read their table instead of the real one —
+      returning whatever membership they choose. Pinning <code>search_path = public</code> closes it.
+      It's a documented Postgres privilege-escalation vector, not a theoretical one.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q54</span>
+  <div class="q">How is the worker endpoint protected without a user session?</div>
+  <div class="a">
+    <p>
+      A shared secret in the <code>x-worker-secret</code> header, compared against
+      <code>WORKER_TICK_SECRET</code>. Session auth is meaningless there — the caller is a cron
+      scheduler, not a person — and the route is excluded from the auth middleware for that reason.
+    </p>
+    <p>
+      Improvements for production: constant-time comparison to avoid timing leaks, secret rotation,
+      and IP allowlisting where the scheduler has stable egress.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q55</span>
+  <div class="q">What's the difference between the anon key and the service role key?</div>
+  <div class="a">
+    <p>
+      The anon key is a public identifier safe to ship to browsers — everything it can reach is
+      bounded by RLS, so it grants nothing on its own. The service role key <strong>bypasses RLS
+      entirely</strong>: full read/write across every tenant.
+    </p>
+    <p>
+      So they get completely different handling. Anon is <code>NEXT_PUBLIC_</code>; service role never
+      is, lives only in server environment, and is treated as compromised the moment it appears
+      anywhere it shouldn't — in which case the correct response is rotation, not hoping.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q56</span>
+  <div class="q">What security issues remain?</div>
+  <div class="a">
+    <p>Being straightforward about this is better than claiming none:</p>
+    <ul>
+      <li><strong>No rate limiting</strong> on the translate endpoint — a malicious editor could queue expensive jobs repeatedly. Needs per-org quotas.</li>
+      <li><strong>No audit log</strong> — who approved what, and when, isn't recorded. Real localisation workflows need that for accountability.</li>
+      <li><strong>Worker secret comparison isn't constant-time.</strong></li>
+      <li><strong>No CSRF hardening beyond SameSite cookies</strong> — adequate for now, worth revisiting.</li>
+      <li><strong>Imported script content isn't scanned</strong> — it's rendered as text, not HTML, so injection risk is low, but export paths would need care.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================================================================== -->
+<h2><span class="num">20</span>Interview Questions — Behavioural</h2>
+<p class="lede">Questions 57–62. Same rigour, told as narrative.</p>
+
+<div class="cat"><div class="cn">Category H</div><div class="ct">Behavioural &amp; storytelling</div></div>
+
+<div class="qa"><span class="qn">Q57</span>
+  <div class="q">Tell me about a difficult bug you debugged.</div>
+  <div class="a">
+    <p>
+      <strong>Situation:</strong> Testing the pipeline against the live API, a stage cue
+      <code>[SFX: door creaks]</code> came back as <code>[SFX: கதவு கீச்சிடுகிறது.</code> — translated,
+      with the closing bracket gone. My unit tests all passed.
+    </p>
+    <p>
+      <strong>Investigation:</strong> The tests used a fake provider that echoed text back, so a
+      structural mistake was invisible — the text went out and came back looking fine. I traced what
+      was actually sent and found the payload was <code>door creaks]</code>, not the whole cue.
+    </p>
+    <p>
+      <strong>Root cause:</strong> Speaker-splitting ran before placeholder masking. The cue contains
+      a colon, so <code>[SFX</code> matched the speaker pattern and the rest was treated as dialogue.
+      Neither function was wrong alone — the <em>ordering</em> was.
+    </p>
+    <p>
+      <strong>Fix:</strong> Mask the whole line first, then split the speaker, so the cue is one
+      opaque token with no colon. Plus a rule that character names never contain brackets. Added
+      regression tests at both layers. API calls for the sample set also dropped from 6 to 4.
+    </p>
+    <p>
+      <strong>Lesson:</strong> mocks verify the contract you imagined; only the real dependency
+      verifies the one that exists.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q58</span>
+  <div class="q">Tell me about a time you disagreed with a requirement.</div>
+  <div class="a">
+    <p>
+      The spec listed sixteen target languages including Spanish, French, Japanese and Chinese, and
+      named Sarvam as the provider. Checking Sarvam's documentation first, I found it covers English
+      and the 22 scheduled Indian languages only — fourteen of the sixteen were unreachable.
+    </p>
+    <p>
+      I raised it immediately with the evidence and options: route non-Indic languages to a second
+      provider, or trim the list to what genuinely works. The decision was to trim, so I built the
+      supported set as a single source of truth with the UI offering only real languages — and kept
+      the provider abstraction so widening it later is one file.
+    </p>
+    <p>
+      <strong>Lesson:</strong> validating requirements against the actual API before writing code
+      turned a guaranteed production failure into a five-minute conversation.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q59</span>
+  <div class="q">Tell me about a mistake you made.</div>
+  <div class="a">
+    <p>
+      I shipped a Translate button that rendered greyed out reading "Translate 0 rows" whenever an
+      episode was already fully translated — with no explanation and no way to re-run. A user reported
+      "translation is not working," and they were right to.
+    </p>
+    <p>
+      The backend was fine; I'd simply never designed a state for "already done", so success and
+      failure looked identical. I'd validated the pipeline exhaustively and under-tested the interface
+      around it.
+    </p>
+    <p>
+      Fixed by making the state legible — "Re-translate 500 rows" with a confirmation badge, and
+      distinct copy for "no rows imported yet". The broader lesson: a disabled control with no
+      explanation is indistinguishable from a broken one, and I now treat empty and completed states
+      as first-class rather than afterthoughts.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q60</span>
+  <div class="q">How did you decide what to test?</div>
+  <div class="a">
+    <p>
+      By cost of being wrong, not by coverage percentage. Tests concentrate where a silent failure
+      would be expensive and hard to detect: the placeholder round-trip, speaker splitting, chunking,
+      provider routing, batch deduplication, memory hits and failure isolation.
+    </p>
+    <p>
+      The most valuable tests are the <strong>negative</strong> ones — asserting that a machine
+      translation cannot overwrite a human correction, and that a viewer cannot start a job. Those
+      prove a guarantee rather than a behaviour.
+    </p>
+    <p>
+      I didn't unit-test the CSS or trivial getters. I did spin up a real Postgres to validate
+      migrations, which caught two bugs no amount of review would have.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q61</span>
+  <div class="q">What would you do differently starting over?</div>
+  <div class="a">
+    <ul>
+      <li><strong>Test against the real API sooner.</strong> The stage-cue bug existed for a while behind passing tests. I'd run a live check on day one.</li>
+      <li><strong>Generate database types from the start</strong> rather than hand-maintaining them — that cost an hour of confusing <code>never</code> errors.</li>
+      <li><strong>Design empty and completed states alongside the happy path</strong>, given the dead-button bug.</li>
+      <li><strong>Consider segment-level translation memory earlier.</strong> Row-level was simpler and matched the spec, but segment-level would meaningfully raise hit rates and is harder to retrofit.</li>
+    </ul>
+    <p>
+      What I'd keep: the provider abstraction, the Postgres queue, and enforcing invariants in the
+      database. All three paid off repeatedly.
+    </p>
+  </div>
+</div>
+
+<div class="qa"><span class="qn">Q62</span>
+  <div class="q">What are you most proud of here?</div>
+  <div class="a">
+    <p>
+      That the quality guarantees are real rather than aspirational. It would have been easy to send
+      each row to the API, store what came back, and call it done — it would demo fine.
+    </p>
+    <p>
+      Instead the pipeline provably preserves character names, placeholders, stage cues, line breaks
+      and numbering, and <em>refuses to ship</em> a row it can't verify. That's backed by tests, by a
+      live-API check, and by a real bug it caught.
+    </p>
+    <p>
+      The 500-rows-for-8-API-calls number is the same story from the commercial side: the design isn't
+      just correct, it's economically viable at the scale it targets.
+    </p>
+  </div>
+</div>
+
+<!-- ==================================================================== -->
+<h2><span class="num">21</span>One-Page Cheat Sheet</h2>
+<p class="lede">Read this in the ten minutes before an interview.</p>
+
+<h3>The numbers</h3>
+<table class="tight">
+  <tr><td style="width:42%"><strong>500 rows → 8 API calls</strong></td><td>64% cache hit, cold start, ~12 seconds, 0 failures</td></tr>
+  <tr><td><strong>23 languages</strong></td><td>English + 22 scheduled Indian languages</td></tr>
+  <tr><td><strong>10 tables, 11 RPCs</strong></td><td>23 RLS policies, 34 indexes, 5 migrations</td></tr>
+  <tr><td><strong>44 tests</strong></td><td>plus a 12-step SQL smoke test and a live-API check</td></tr>
+  <tr><td><strong>2,000 chars</strong></td><td>Sarvam per-call limit (1,000 for mayura:v1)</td></tr>
+  <tr><td><strong>Scale target</strong></td><td>100+ books, 10k+ episodes, 1M+ script rows</td></tr>
+</table>
+
+<h3>The five sentences that matter</h3>
+<ol>
+  <li><strong>"Translate doesn't translate — it enqueues."</strong> Async because a 5,000-row episode outlives any request timeout.</li>
+  <li><strong>"The rules are structural, not prompted."</strong> No system prompt exists, so the model never sees protected content — and output is verified, not trusted.</li>
+  <li><strong>"The queue is Postgres, using SKIP LOCKED."</strong> Transactional consistency with the data, no second broker.</li>
+  <li><strong>"Invariants live in the database."</strong> Machine can never overwrite human; one live job per episode/language. Constraints, not conventions.</li>
+  <li><strong>"500 rows cost 8 API calls."</strong> Skip untranslatable → dedupe → memory → human corrections persist.</li>
+</ol>
+
+<h3>Concepts to be able to explain cold</h3>
+<div class="grid2">
+  <ul>
+    <li><code>FOR UPDATE SKIP LOCKED</code></li>
+    <li>Keyset vs OFFSET pagination</li>
+    <li>Partial indexes (perf <em>and</em> correctness)</li>
+    <li>Trigram GIN vs B-tree vs tsvector</li>
+    <li>RLS + <code>SECURITY DEFINER</code> + <code>search_path</code></li>
+  </ul>
+  <ul>
+    <li><code>REPLICA IDENTITY FULL</code> and Realtime</li>
+    <li>Exponential backoff with full jitter</li>
+    <li>Idempotency (enqueue, counter roll-up)</li>
+    <li>Bounded concurrency vs <code>Promise.all</code></li>
+    <li><code>interface</code> vs <code>type</code> index signatures</li>
+  </ul>
+</div>
+
+<h3>Three stories, ready to tell</h3>
+<table class="tight">
+  <tr><td style="width:30%"><strong>The stage cue</strong></td><td>Live API caught what mocks couldn't; ordering bug between two correct functions. → <em>Q57</em></td></tr>
+  <tr><td><strong>The language spec</strong></td><td>Validated requirements against the real API; raised it before writing code. → <em>Q58</em></td></tr>
+  <tr><td><strong>The dead button</strong></td><td>"Not working" was a UI state I never designed; checked data before code. → <em>Q59</em></td></tr>
+</table>
+
+<div class="callout ok" style="margin-top:7mm">
+  <span class="t">If you only remember one thing</span>
+  <p>
+    Lead with the <strong>constraint</strong>, then the <strong>decision</strong>, then the
+    <strong>evidence</strong>. "Sarvam has no system prompt, so I enforced the rules structurally and
+    verified the output — which caught a real bug where a stage cue was being torn in half." That
+    shape — constraint, decision, evidence — turns a feature list into engineering judgement.
+  </p>
+</div>
+
+<div style="margin-top:12mm;padding-top:4mm;border-top:1px solid var(--rule);font-size:8.6pt;color:var(--faint)">
+  Vaani — Technical Documentation &amp; Interview Guide · Next.js 15 · TypeScript · Supabase · Sarvam AI
+</div>
