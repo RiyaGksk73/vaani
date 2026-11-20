@@ -94,7 +94,7 @@ export default async function EpisodePage({
       <div className="page-head">
         <div>
           <div className="breadcrumb">
-            <Link href="/">Source books</Link> / <Link href={`/books/${book.id}`}>{book.title}</Link>
+            <Link href="/source">Source books</Link> / <Link href={`/books/${book.id}`}>{book.title}</Link>
           </div>
           <h1>
             {episode.number}. {episode.title}

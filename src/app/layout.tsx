@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { getCurrentOrg, getUser } from "@/lib/supabase/server";
-import { SignOutButton } from "@/components/SignOutButton";
+import { Sidebar } from "@/components/Sidebar";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 export const metadata: Metadata = {
   title: "Vaani - script localisation",
@@ -19,25 +21,16 @@ export default async function RootLayout({
   const org = user ? await getCurrentOrg() : null;
 
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <body>
         {user ? (
-          <header className="topbar">
-            <div className="topbar-inner">
-              <Link href="/" className="brand">
-                Vaani
-                {org ? <span>{org.name}</span> : null}
-              </Link>
-              <div className="spacer" />
-              <Link href="/memory" className="small muted">
-                Translation memory
-              </Link>
-              <span className="small faint">{user.email}</span>
-              <SignOutButton />
-            </div>
-          </header>
-        ) : null}
-        <main className="shell">{children}</main>
+          <div className="app">
+            <Sidebar email={user.email ?? ""} workspace={org?.name ?? null} />
+            <main className="main">{children}</main>
+          </div>
+        ) : (
+          <main className="auth-shell">{children}</main>
+        )}
       </body>
     </html>
   );

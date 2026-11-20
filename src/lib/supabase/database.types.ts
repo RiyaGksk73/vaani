@@ -40,6 +40,10 @@ export type Book = {
   title: string;
   source_language: string;
   description: string | null;
+  /** Added in 0007_book_metadata.sql. */
+  author: string | null;
+  /** 'literature' | 'westland' | 'comics', added in 0007_book_metadata.sql. */
+  category: string | null;
   created_by: string | null;
   created_at: string;
   updated_at: string;

@@ -34,7 +34,7 @@ export default async function BookPage({
       <div className="page-head">
         <div>
           <div className="breadcrumb">
-            <Link href="/">Source books</Link>
+            <Link href="/source">Source books</Link>
           </div>
           <h1>{book.title}</h1>
           <p className="muted small" style={{ margin: "6px 0 0" }}>

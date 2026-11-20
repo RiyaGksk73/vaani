@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient, getCurrentOrg } from "@/lib/supabase/server";
 import { isLanguageCode, parseScriptLine } from "@/services/translation";
+import { isBookCategory } from "@/lib/book-categories";
 
 export interface FormState {
   error?: string;
@@ -14,9 +15,12 @@ export async function createBook(_prev: FormState, formData: FormData): Promise<
   const title = String(formData.get("title") ?? "").trim();
   const sourceLanguage = String(formData.get("sourceLanguage") ?? "");
   const description = String(formData.get("description") ?? "").trim();
+  const author = String(formData.get("author") ?? "").trim();
+  const category = String(formData.get("category") ?? "");
 
   if (!title) return { error: "A title is required." };
   if (!isLanguageCode(sourceLanguage)) return { error: "Pick a source language." };
+  if (category && !isBookCategory(category)) return { error: "Pick a valid category." };
 
   const org = await getCurrentOrg();
   if (!org) return { error: "Your workspace is not set up yet. Sign out and sign in again." };
@@ -27,11 +31,15 @@ export async function createBook(_prev: FormState, formData: FormData): Promise<
     title,
     source_language: sourceLanguage,
     description: description || null,
+    // Only sent when filled in, so the form keeps working before 0007 is applied.
+    ...(author ? { author } : {}),
+    ...(category ? { category } : {}),
   });
 
   if (error) return { error: error.message };
 
   revalidatePath("/");
+  revalidatePath("/source");
   return { message: `Created "${title}".` };
 }
 

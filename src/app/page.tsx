@@ -1,11 +1,20 @@
 import Link from "next/link";
-import { createClient, getCurrentOrg } from "@/lib/supabase/server";
-import { languageLabel } from "@/services/translation";
-import { NewBookForm } from "@/components/NewBookForm";
+import { getCurrentOrg } from "@/lib/supabase/server";
+import { isBookCategory, listBooks } from "@/lib/books";
+import { BooksToolbar } from "@/components/BooksToolbar";
+import { BooksTable } from "@/components/BooksTable";
+import { Icon } from "@/components/Icon";
 
 export const dynamic = "force-dynamic";
 
-export default async function BooksPage() {
+export default async function TranslateDashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; tab?: string }>;
+}) {
+  const { q = "", tab } = await searchParams;
+  const category = isBookCategory(tab) ? tab : undefined;
+
   const org = await getCurrentOrg();
 
   if (!org) {
@@ -17,58 +26,52 @@ export default async function BooksPage() {
     );
   }
 
-  const supabase = await createClient();
-
-  const { data: books } = await supabase
-    .from("books")
-    .select("id, title, source_language, description, created_at, episodes(count)")
-    .eq("org_id", org.id)
-    .order("created_at", { ascending: false })
-    .limit(200);
+  const { books, error, hasMetadata } = await listBooks({ orgId: org.id, q, category });
+  const canCreate = org.role === "owner" || org.role === "editor";
 
   return (
     <>
-      <div className="page-head">
-        <div>
-          <h1>Source books</h1>
-          <p className="muted small" style={{ margin: "4px 0 0" }}>
-            {books?.length ?? 0} book{books?.length === 1 ? "" : "s"}
-          </p>
-        </div>
+      <div className="dash-head">
+        <h1>Your Comics Translated Books</h1>
+        {canCreate ? (
+          <Link href="/source#new-book" className="btn btn-dark">
+            <Icon name="plus" size={16} />
+            Translate a Book
+          </Link>
+        ) : null}
       </div>
 
-      {books && books.length > 0 ? (
-        <div className="grid" style={{ marginBottom: 32 }}>
-          {books.map((book) => {
-            const episodeCount = Array.isArray(book.episodes)
-              ? (book.episodes[0]?.count ?? 0)
-              : 0;
-            return (
-              <Link key={book.id} href={`/books/${book.id}`} className="tile">
-                <h3>{book.title}</h3>
-                <p className="small muted" style={{ margin: "2px 0 10px" }}>
-                  {book.description || "No description"}
-                </p>
-                <div className="row" style={{ gap: 6 }}>
-                  <span className="badge badge-accent">
-                    {languageLabel(book.source_language)}
-                  </span>
-                  <span className="badge">
-                    {episodeCount} episode{episodeCount === 1 ? "" : "s"}
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
+      <BooksToolbar basePath="/" q={q} tab={category} />
+
+      {!hasMetadata ? (
+        <p className="notice" style={{ marginBottom: 16 }}>
+          Author search and categories need the <code>0007_book_metadata.sql</code> migration.
+          Run <code>supabase db push</code> to enable them.
+        </p>
+      ) : null}
+
+      {error ? (
+        <div className="table-card empty-state">
+          <h2>Could not load books</h2>
+          <p className="error-text">{error}</p>
         </div>
+      ) : books.length > 0 ? (
+        <BooksTable books={books} variant="translate" />
       ) : (
-        <div className="card card-pad empty-state" style={{ marginBottom: 32 }}>
-          <h2>No books yet</h2>
-          <p className="small">Add your first source book below to start localising.</p>
+        <div className="table-card empty-state">
+          <h2>{q || category ? "No matching books" : "No books yet"}</h2>
+          <p className="small">
+            {q || category ? (
+              "Try a different search or category."
+            ) : (
+              <>
+                Add a source book under <Link href="/source">Source</Link>, import its script, then
+                translate it from the episode page.
+              </>
+            )}
+          </p>
         </div>
       )}
-
-      {org.role === "owner" || org.role === "editor" ? <NewBookForm /> : null}
     </>
   );
 }
